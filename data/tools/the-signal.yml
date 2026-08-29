@@ -1,0 +1,21 @@
+name: The Signal
+website_url: https://www.thesignal.club
+description: Independent weekly newsletter on AI-native go-to-market playbooks and
+  infrastructure.
+categories:
+- Learning
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: false
+api_docs_url: null
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

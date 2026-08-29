@@ -1,0 +1,21 @@
+name: Smartlead
+website_url: https://www.smartlead.ai
+description: Cold email platform for managing sending inboxes, warmup, deliverability,
+  and campaign sequences at scale.
+categories:
+- Outbound & Sequencing
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://api.smartlead.ai/reference/welcome
+has_mcp_server: true
+mcp_server_url: https://mcp.smartlead.ai/sse
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

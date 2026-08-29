@@ -1,0 +1,21 @@
+name: dbt_salesforce
+website_url: https://fivetran.github.io/dbt_salesforce/
+description: A dbt package that models raw Salesforce CRM connector data into a ready-to-query
+  revenue and pipeline data model.
+categories:
+- Revenue Data Modeling
+pricing_model: open_source
+source_code_url: https://github.com/fivetran/dbt_salesforce
+license: Apache-2.0
+has_api: false
+api_docs_url: null
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: true
+submitted_by_vendor: false
+stargazers_count: 53
+last_commit_at: '2026-08-18'
+archived: false
+current_release: v2.4.1

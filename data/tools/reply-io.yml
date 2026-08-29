@@ -1,0 +1,21 @@
+name: Reply.io
+website_url: https://reply.io
+description: Sales engagement platform with an AI SDR agent for managing sequences,
+  inbox, and outbound tasks.
+categories:
+- Outbound & Sequencing
+pricing_model: commercial
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://docs.reply.io/
+has_mcp_server: true
+mcp_server_url: https://mcp.reply.io/
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

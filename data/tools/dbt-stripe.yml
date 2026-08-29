@@ -1,0 +1,21 @@
+name: dbt_stripe
+website_url: https://fivetran.github.io/dbt_stripe/
+description: A dbt package that transforms raw Stripe connector data into MRR and
+  revenue-recognition-ready marts.
+categories:
+- Revenue Data Modeling
+pricing_model: open_source
+source_code_url: https://github.com/fivetran/dbt_stripe
+license: Apache-2.0
+has_api: false
+api_docs_url: null
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: true
+submitted_by_vendor: false
+stargazers_count: 61
+last_commit_at: '2026-08-18'
+archived: false
+current_release: v1.10.1

@@ -1,0 +1,20 @@
+name: Exa
+website_url: https://exa.ai/
+description: Web search API built for retrieval and grounding in AI applications.
+categories:
+- Research & Scraping
+pricing_model: freemium
+source_code_url: https://github.com/exa-labs/exa-mcp-server
+license: MIT
+has_api: true
+api_docs_url: https://docs.exa.ai/
+has_mcp_server: true
+mcp_server_url: https://mcp.exa.ai/mcp
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: 4945
+last_commit_at: '2026-08-21'
+archived: false
+current_release: null

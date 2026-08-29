@@ -1,0 +1,21 @@
+name: Deepline
+website_url: https://deepline.com
+description: An agent-native API, CLI, and MCP server for enrichment, waterfalls,
+  validation, and CRM writeback from coding agents.
+categories:
+- Agents & MCP Servers
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://deepline.com/docs/api-reference
+has_mcp_server: true
+mcp_server_url: https://code.deepline.com/api/v2/mcp
+mcp_server_kind: official
+has_cli: true
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

@@ -1,0 +1,21 @@
+name: Mailtrap
+website_url: https://mailtrap.io
+description: Email sending and testing platform combining a hosted sandbox inbox with
+  production delivery infrastructure.
+categories:
+- Deliverability
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://api-docs.mailtrap.io/
+has_mcp_server: true
+mcp_server_url: https://mailtrap.io/blog/best-email-mcp-servers/
+mcp_server_kind: official
+has_cli: true
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

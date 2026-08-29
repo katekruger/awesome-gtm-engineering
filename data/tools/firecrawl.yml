@@ -1,0 +1,21 @@
+name: Firecrawl
+website_url: https://www.firecrawl.dev/
+description: API for turning websites into clean data through scraping, crawling,
+  and extraction.
+categories:
+- Research & Scraping
+pricing_model: open_core
+source_code_url: https://github.com/firecrawl/firecrawl
+license: AGPL-3.0
+has_api: true
+api_docs_url: https://docs.firecrawl.dev/
+has_mcp_server: true
+mcp_server_url: https://github.com/firecrawl/firecrawl-mcp-server
+mcp_server_kind: official
+has_cli: false
+self_hostable: true
+submitted_by_vendor: false
+stargazers_count: 173992
+last_commit_at: '2026-08-29'
+archived: false
+current_release: null

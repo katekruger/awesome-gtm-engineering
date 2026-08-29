@@ -1,0 +1,21 @@
+name: HubSpot MCP Server
+website_url: https://developers.hubspot.com/ai-tools/mcp
+description: An official remote MCP server giving AI agents read and write access
+  to HubSpot CRM contacts, deals, and engagements.
+categories:
+- Agents & MCP Servers
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server
+has_mcp_server: true
+mcp_server_url: https://mcp.hubspot.com
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

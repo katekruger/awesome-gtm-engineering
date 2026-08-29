@@ -1,0 +1,21 @@
+name: Salesforce Hosted MCP Server
+website_url: https://www.salesforce.com/agentforce/mcp-support/model-context-protocol/
+description: A Salesforce-managed MCP endpoint exposing org records, flows, and Apex
+  actions to any MCP-compatible AI agent.
+categories:
+- Agents & MCP Servers
+pricing_model: commercial
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://developer.salesforce.com/docs
+has_mcp_server: true
+mcp_server_url: https://developer.salesforce.com/blogs/2025/06/introducing-mcp-support-across-salesforce
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

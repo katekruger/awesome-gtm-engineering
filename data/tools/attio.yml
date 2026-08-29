@@ -1,0 +1,20 @@
+name: Attio
+website_url: https://attio.com
+description: AI-native CRM with a fully customizable data model and real-time enrichment.
+categories:
+- CRM & Data Quality
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://developers.attio.com
+has_mcp_server: true
+mcp_server_url: https://mcp.attio.com/mcp
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

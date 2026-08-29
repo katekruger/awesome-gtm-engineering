@@ -1,0 +1,21 @@
+name: GTMnow (formerly Sales Hacker Community)
+website_url: https://gtmnow.com
+description: Revenue-team community and media brand continuing the Sales Hacker community
+  under GTMfund.
+categories:
+- Communities
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: false
+api_docs_url: null
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

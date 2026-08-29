@@ -1,0 +1,21 @@
+name: Zapier
+website_url: https://zapier.com/
+description: No-code automation platform connecting thousands of apps into multi-step
+  workflows.
+categories:
+- Workflow Automation
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://docs.zapier.com/platform/reference/rest-api
+has_mcp_server: true
+mcp_server_url: https://zapier.com/mcp
+mcp_server_kind: official
+has_cli: true
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

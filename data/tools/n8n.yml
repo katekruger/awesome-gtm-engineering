@@ -1,0 +1,21 @@
+name: n8n
+website_url: https://n8n.io/
+description: Node-based workflow automation platform for building AI agents and API
+  integrations.
+categories:
+- Workflow Automation
+pricing_model: freemium
+source_code_url: https://github.com/n8n-io/n8n
+license: Sustainable Use License
+has_api: true
+api_docs_url: https://docs.n8n.io/api/
+has_mcp_server: true
+mcp_server_url: https://docs.n8n.io/advanced-ai/mcp/accessing-n8n-mcp-server/
+mcp_server_kind: official
+has_cli: true
+self_hostable: true
+submitted_by_vendor: false
+stargazers_count: 202802
+last_commit_at: '2026-08-29'
+archived: false
+current_release: null

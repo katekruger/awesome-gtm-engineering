@@ -1,0 +1,21 @@
+name: Ocean.io
+website_url: https://www.ocean.io
+description: A B2B lookalike company search and firmographic enrichment platform for
+  building account lists.
+categories:
+- Enrichment & Data
+pricing_model: commercial
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://www.ocean.io/api
+has_mcp_server: true
+mcp_server_url: https://app.ocean.io/docs/getting-started/mcp
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

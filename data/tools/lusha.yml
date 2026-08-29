@@ -1,0 +1,21 @@
+name: Lusha
+website_url: https://www.lusha.com
+description: Contact and company enrichment with verified emails and phone numbers
+  plus prospecting and buying-intent signals.
+categories:
+- Enrichment & Data
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://docs.lusha.com/apis/openapi
+has_mcp_server: true
+mcp_server_url: https://mcp.lusha.com
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

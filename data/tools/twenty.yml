@@ -1,0 +1,21 @@
+name: Twenty
+website_url: https://twenty.com
+description: Open-source CRM with a Salesforce-like data model and REST plus GraphQL
+  APIs.
+categories:
+- CRM & Data Quality
+pricing_model: open_core
+source_code_url: https://github.com/twentyhq/twenty
+license: AGPL-3.0
+has_api: true
+api_docs_url: https://twenty.com/developers
+has_mcp_server: true
+mcp_server_url: https://github.com/mhenry3164/twenty-crm-mcp-server
+mcp_server_kind: community
+has_cli: false
+self_hostable: true
+submitted_by_vendor: false
+stargazers_count: 55846
+last_commit_at: '2026-08-29'
+archived: false
+current_release: null

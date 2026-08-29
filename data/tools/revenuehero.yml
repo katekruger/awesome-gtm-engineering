@@ -1,0 +1,21 @@
+name: RevenueHero
+website_url: https://www.revenuehero.io
+description: Inbound meeting router that matches, qualifies, and books leads with
+  sales reps in real time.
+categories:
+- Routing & Territory
+pricing_model: commercial
+source_code_url: null
+license: null
+has_api: null
+api_docs_url: null
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

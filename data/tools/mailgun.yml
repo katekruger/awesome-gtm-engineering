@@ -1,0 +1,21 @@
+name: Mailgun
+website_url: https://www.mailgun.com
+description: Transactional email sending API with deliverability diagnostics and bounce
+  classification tools.
+categories:
+- Deliverability
+pricing_model: freemium
+source_code_url: https://github.com/mailgun/mailgun-mcp-server
+license: Apache-2.0
+has_api: true
+api_docs_url: https://documentation.mailgun.com/
+has_mcp_server: true
+mcp_server_url: https://www.mailgun.com/integrations/mcp-server/
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: 58
+last_commit_at: '2026-07-24'
+archived: false
+current_release: null

@@ -1,0 +1,21 @@
+name: Crunchbase
+website_url: https://www.crunchbase.com
+description: A company intelligence platform for researching companies, funding rounds,
+  investors, and acquisitions.
+categories:
+- Enrichment & Data
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://data.crunchbase.com/docs
+has_mcp_server: null
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null
