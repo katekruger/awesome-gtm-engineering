@@ -5,16 +5,28 @@ Deterministic: same input always produces the same bytes. Do not add
 anything here that depends on wall-clock time, random ordering, or
 filesystem iteration order.
 """
+import argparse
 import pathlib
+import re
 import sys
 
 import jinja2
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-DATA = ROOT / "data"
-TOOLS_DIR = DATA / "tools"
 TEMPLATE_DIR = pathlib.Path(__file__).resolve().parent / "templates"
+
+# Mirrors github-slugger's ASCII punctuation strip: everything is kept except
+# this set, spaces become hyphens, and — critically — consecutive hyphens are
+# NOT collapsed. "Enrichment & Data" must become "enrichment--data" to match
+# the anchor GitHub actually generates for the rendered heading; a naive
+# single-hyphen slug fails awesome-lint's ToC-link-must-match-heading-anchor
+# check even though the text looks identical.
+_SLUG_STRIP = re.compile(r"[!\"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]")
+
+
+def github_slug(text):
+    return _SLUG_STRIP.sub("", text.lower()).replace(" ", "-")
 
 
 def legend(tool):
@@ -31,14 +43,14 @@ def legend(tool):
     return f" {''.join(marks)}" if marks else ""
 
 
-def load_categories():
-    with open(DATA / "categories.yml") as f:
+def load_categories(categories_file):
+    with open(categories_file) as f:
         return yaml.safe_load(f)
 
 
-def load_tools():
+def load_tools(tools_dir):
     tools = []
-    for path in sorted(TOOLS_DIR.glob("*.yml")):
+    for path in sorted(pathlib.Path(tools_dir).glob("*.yml")):
         with open(path) as f:
             tool = yaml.safe_load(f)
         tool["_source"] = path.name
@@ -47,7 +59,10 @@ def load_tools():
 
 
 def group_by_category(categories, tools):
-    by_slug = {c["slug"]: {**c, "tools": []} for c in categories}
+    by_slug = {
+        c["slug"]: {**c, "anchor": github_slug(c["name"]), "tools": []}
+        for c in categories
+    }
     for tool in tools:
         for cat_name in tool["categories"]:
             slug = next(
@@ -59,7 +74,9 @@ def group_by_category(categories, tools):
                 )
             by_slug[slug]["tools"].append(tool)
     for cat in by_slug.values():
-        cat["tools"].sort(key=lambda t: t["name"].lower())
+        # Stable, case-insensitive, alphabetical — the whole point is that
+        # running this twice on unchanged data produces byte-identical output.
+        cat["tools"].sort(key=lambda t: t["name"].casefold())
     return list(by_slug.values())
 
 
@@ -73,16 +90,29 @@ def render(categories):
         lstrip_blocks=True,
     )
     template = env.get_template("readme.md.j2")
-    return template.render(categories=categories)
+    output = template.render(categories=categories)
+    if not output.endswith("\n"):
+        output += "\n"
+    return output
 
 
-def main():
-    categories = load_categories()
-    tools = load_tools()
+def build(categories_file, tools_dir):
+    categories = load_categories(categories_file)
+    tools = load_tools(tools_dir)
     grouped = group_by_category(categories, tools)
-    output = render(grouped)
-    (ROOT / "README.md").write_text(output)
-    print(f"wrote README.md — {len(tools)} entries across {len(grouped)} categories")
+    return render(grouped), len(tools), len(grouped)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--categories-file", default=str(ROOT / "data" / "categories.yml"))
+    parser.add_argument("--tools-dir", default=str(ROOT / "data" / "tools"))
+    parser.add_argument("--output", default=str(ROOT / "README.md"))
+    args = parser.parse_args(argv)
+
+    output, tool_count, category_count = build(args.categories_file, args.tools_dir)
+    pathlib.Path(args.output).write_text(output)
+    print(f"wrote {args.output} — {tool_count} entries across {category_count} categories")
 
 
 if __name__ == "__main__":
