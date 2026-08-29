@@ -1,0 +1,19 @@
+name: Apollo.io
+website_url: https://apollo.io
+description: A B2B contact database with built-in enrichment and outbound sequencing.
+categories: [Enrichment & Data]
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://apolloio.github.io/apollo-api-docs/
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: null
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

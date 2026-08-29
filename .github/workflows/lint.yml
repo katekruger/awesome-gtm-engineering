@@ -23,11 +23,19 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: awesome-lint
-        run: npx --yes awesome-lint
-
       - name: Install build dependencies
-        run: pip install -r build/requirements.txt
+        run: pip install -r build/requirements-dev.txt
 
       - name: Validate entries and category minimums
         run: python build/validate.py
+
+      - name: Run build/validate unit tests
+        run: python -m pytest tests/
+
+      - name: Regenerate README for linting
+        run: python build/build.py
+
+      - name: awesome-lint
+        run: npx --yes awesome-lint
+        env:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

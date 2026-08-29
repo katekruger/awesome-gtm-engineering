@@ -1,0 +1,6 @@
+- slug: enrichment-data
+  name: Enrichment & Data
+  min_entries: 3
+- slug: outbound-sequencing
+  name: Outbound & Sequencing
+  min_entries: 3

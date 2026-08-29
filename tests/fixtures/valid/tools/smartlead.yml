@@ -1,0 +1,19 @@
+name: Smartlead
+website_url: https://smartlead.ai
+description: Multi-inbox cold email sequencing built for agencies and outbound teams.
+categories: [Outbound & Sequencing]
+pricing_model: commercial
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://api.smartlead.ai/reference
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: null
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null
