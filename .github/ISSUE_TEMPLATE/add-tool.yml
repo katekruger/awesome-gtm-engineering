@@ -1,0 +1,59 @@
+name: Add a tool
+description: Propose a new entry for the list
+title: "Add: "
+labels: ["add-tool"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Tool name
+    validations:
+      required: true
+  - type: input
+    id: website_url
+    attributes:
+      label: Website URL
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: One-sentence description
+      description: Uppercase first character, ends in a period.
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Enrichment & Data
+        - Signals & Intent
+        - Outbound & Sequencing
+        - Deliverability
+        - CRM & Data Quality
+        - Routing & Territory
+        - Attribution & Analytics
+        - Revenue Data Modeling
+        - Agents & MCP Servers
+        - Workflow Automation
+        - Research & Scraping
+        - Compensation & Planning
+        - Learning
+        - Communities
+    validations:
+      required: true
+  - type: checkboxes
+    id: vendor
+    attributes:
+      label: Disclosure
+      options:
+        - label: I am submitting my own product or my employer's product
+          required: false
+  - type: checkboxes
+    id: usable
+    attributes:
+      label: Usability
+      options:
+        - label: This tool is usable without a sales call (public docs, public pricing or a real free tier, or a public repo)
+          required: true

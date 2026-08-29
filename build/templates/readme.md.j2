@@ -1,0 +1,22 @@
+# Awesome GTM Engineering
+
+[![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+
+> Building revenue systems with code, data and agents.
+
+## Contents
+
+{% for category in categories -%}
+- [{{ category.name }}](#{{ category.slug }})
+{% endfor %}
+
+{% for category in categories %}
+## {{ category.name }}
+
+{% for tool in category.tools -%}
+- [{{ tool.name }}]({{ tool.website_url }}) - {{ tool.description }}{{ tool.legend }}
+{% endfor %}
+{% endfor %}
+## Footnotes
+
+🔓 open source · 💰 commercial · 🧩 freemium · 🔌 has API · 🤖 has MCP server (🎖️ official) · ⌨️ has CLI · 🏠 self-hostable

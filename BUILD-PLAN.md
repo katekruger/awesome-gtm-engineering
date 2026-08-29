@@ -11,13 +11,13 @@ Research current as of: 28 Aug 2026
 
 ## 0. Handover context — read this first
 
-1. **Two lists share this name and neither is authoritative.** `marketinguys/awesome-gtm-engineering` has the distribution (120 stars) and none of the maintenance (2 total commits, **0 of 11 PRs ever closed**, contains a product that was sunset in 2023). `eliasstravik/awesome-gtm-engineering` has the correctness and no audience (10 stars, 33 entries, but current taste and an active maintainer).
+1. **Two lists already use this name, and neither is actively maintained.** `marketinguys/awesome-gtm-engineering` has 120 stars but 2 total commits and 0 of 11 PRs ever closed; it still lists a product Google sunset in 2023. `eliasstravik/awesome-gtm-engineering` has current content and an active maintainer but only 10 stars and 33 entries. §1 explains why this project is a new repository rather than a contribution to either, and how to be a good neighbour about it.
 
 2. **Submissions to the main `sindresorhus/awesome` index are currently CLOSED.** The repo description says so verbatim: *"Pull requests are temporarily disabled until I have a chance to catch up with the existing ones."* ~70–90 open PRs, newest visible from 23 June 2026. **You cannot get listed today.** Build for compliance, park visibility on issue [#2242](https://github.com/sindresorhus/awesome/issues/2242) (the designated incubation thread), and treat the actual listing as an unschedulable event.
 
 3. **The 30-day age rule is a human review gate, not a lint gate.** `awesome-lint`'s `git-repo-age` rule is **commented out in source** ("Disabled for now as it means we cannot sparsely check out the repo"). Passing lint says nothing about whether you've waited. Start the clock early.
 
-4. **The license rule kills most lists.** CC0 strongly recommended, any Creative Commons acceptable, and **MIT / BSD / Apache / GPL / WTFPL / Unlicense are explicitly NOT acceptable.** `marketinguys` ships MIT with a CC BY-SA badge that contradicts its own LICENSE file. This alone disqualifies it.
+4. **The license rule catches most lists out.** CC0 strongly recommended, any Creative Commons acceptable, and **MIT / BSD / Apache / GPL / WTFPL and Unlicense are explicitly NOT acceptable.** Get this right on day one — it is annoying to change later.
 
 5. **The single biggest quality separator is generating the README from a data file.** `awesome-selfhosted-data` and `abordage/awesome-mcp` both do it; every list that decays does not. One YAML file per entry means clean PR diffs, no merge conflicts, and machine-refreshed metadata.
 
@@ -25,40 +25,40 @@ Research current as of: 28 Aug 2026
 
 ---
 
-## 1. The takeover decision
+## 1. Why a new list rather than contributing to an existing one
 
-### Head to head
+Two lists already use this name. Neither is well maintained, and the question is whether to contribute to one or start fresh. Here is what's actually there, so the choice is made on evidence.
+
+### What exists
 
 | | `marketinguys` | `eliasstravik` |
 |---|---|---|
-| Stars / forks / watchers | **120 / 27 / 4** | 10 / 1 / 0 |
-| Total commits | **2** | 7 |
+| Stars / forks / watchers | 120 / 27 / 4 | 10 / 1 / 0 |
+| Total commits | 2 | 7 |
 | Entries | 40 across 11 sections | 33 across 11 sections |
-| License file | MIT ❌ | **CC0 1.0** ✅ |
-| License badge | CC BY-SA 4.0 — **contradicts the LICENSE file** | n/a |
-| Awesome badge | Absent ❌ | **Present** ✅ |
-| `CONTRIBUTING.md` | 404 ❌ | Inline in README only ⚠️ |
-| `.github/` | Absent ❌ | Absent ❌ |
-| `awesome` / `awesome-list` topics | Absent ❌ | — |
-| Open PRs | **11 open, 0 ever closed** | 1 open, 3 closed |
-| Content currency | **Lists Google Optimize (sunset 2023)**; Clearbit standalone; martech not GTM-engineering | Clay, Cargo, Octave, Exa, Firecrawl, Stagehand, Attio, Common Room — current |
-| Structural problems | Everything above | 4/4 "Learning" entries are Clay properties (vendor capture); Signals/Routing/Analytics are one-entry stubs |
+| License file | MIT | CC0 1.0 ✅ |
+| License badge | CC BY-SA 4.0 — contradicts its own LICENSE file | n/a |
+| Awesome badge | Absent | Present ✅ |
+| `CONTRIBUTING.md` | Absent | Inline in README only |
+| `.github/` | Absent | Absent |
+| `awesome` / `awesome-list` topics | Absent | — |
+| Open PRs | 11 open, 0 ever closed | 1 open, 3 closed |
+| Content currency | Still lists Google Optimize, which Google sunset in 2023; Clearbit standalone, though it was absorbed into HubSpot | Clay, Cargo, Octave, Exa, Firecrawl, Stagehand, Attio, Common Room — current |
+| Structural gaps | All of the above | "Learning" is 4 entries, all 4 from one vendor; Signals / Routing / Analytics are one-entry stubs |
 
-### The PR queue `marketinguys` would hand you
+Both are volunteer efforts that ran out of maintainer attention, which is the normal fate of a hand-edited list. That is the problem this project is designed around, not a criticism of either author.
 
-11 open, 0 closed, opened Feb–Aug 2026. **9 of 11 are vendors self-adding their own product.** This is the classic decay pattern: an SEO-ish list at 120 stars becomes a backlink target. Only #12 (Embercore + fixes the license badge mismatch) is substantively useful.
+### Decision: build a new repository
 
-### Recommendation: **build fresh, do not fork either**
+Three reasons, none of them about the incumbents:
 
-Three reasons:
+1. **Contributing doesn't fix the structural problem.** Both lists are hand-edited READMEs with no data layer, no metadata refresh, and no staleness policy. Adding entries to either one produces a list that decays again in six months. The value of this project is the automation, and that can't be retrofitted through a PR.
+2. **The content is not the hard part.** 40 entries is a weekend. What neither list has — machine-verified freshness and the `has_api` / `has_mcp_server` facets — is the whole point, and it needs the data-file architecture from the ground up.
+3. **Two of the categories that matter most in 2026 are absent from both.** Neither has an "Agents & MCP Servers" section or a "Revenue Data Modeling" section. That is a genuine editorial gap, and it's the honest argument for a new list.
 
-1. **You cannot acquire `marketinguys`.** There is no transfer mechanism and its maintainer has never responded to anything. "Taking it over" would mean forking a 40-entry martech list with a broken license, then rewriting all 40 entries — at which point you have written a new list while inheriting a name collision and someone else's SEO.
-2. **Its 120 stars are not transferable.** A fork starts at zero regardless. The backlinks stay with the original.
-3. **Both lists are small enough that content is not the moat.** 40 entries is a weekend. The moat is the automation and the facets, and neither existing list has any.
+**Then be a good neighbour about it.** Open a courteous issue on `eliasstravik/awesome-gtm-engineering` offering to consolidate — he has good taste and actually processes submissions (3 PRs closed, versus 0 of 11 on the other). If he'd rather keep his own, that's fine; link to each other and move on. Don't approach `marketinguys` — 2 total commits and no PR responses since February means nobody is home, and an unanswered message is not worth the time.
 
-**What to do instead:** build `katekruger/awesome-gtm-engineering` correctly, and open a courteous PR to `eliasstravik` offering to consolidate — he actually processes submissions and his taste is good. Do not engage `marketinguys`.
-
-**Name collision is real and unavoidable.** Three repos with the same name. Mitigate by shipping a website on a real domain — the site becomes the canonical reference and the repo becomes its source. `abordage/awesome-mcp` and `punkpeye/awesome-mcp-servers` coexist fine because one has a companion site.
+**The name collision is real.** Three repos will share the name. Mitigate by shipping a website on a real domain and letting the site become the canonical reference. `abordage/awesome-mcp` and `punkpeye/awesome-mcp-servers` coexist fine on exactly that basis.
 
 ---
 
@@ -70,7 +70,7 @@ Three reasons:
 
 1. **Machine-verified freshness.** Stars, last commit, archived flag, latest release, refreshed daily. A staleness policy the bot enforces by opening its own issues.
 2. **The facets nobody publishes.** `has_api`, `has_mcp_server`, `open_source`, `self_hostable`, `pricing_model`. In 2026 those are the filters that matter, and no GTM list has any of them.
-3. **Vendor-capture resistance, stated as policy.** eliasstravik's Learning section being 4/4 Clay properties and marketinguys' queue being 9/11 self-promo are both symptoms of having no written inclusion policy. Write one, enforce it in review, and say so in `contributing.md`.
+3. **A written inclusion policy.** Most lists have none, which is how a category quietly ends up dominated by one vendor's properties. Write the policy, enforce it in review, and publish it in `contributing.md` so contributors know the bar before they submit.
 
 ---
 
@@ -209,7 +209,7 @@ Contents
 ├── Workflow Automation
 ├── Research & Scraping
 ├── Compensation & Planning
-├── Learning                     ← vendor-capture policy applies hardest here
+├── Learning                     ← the inclusion policy applies hardest here
 └── Communities
 ```
 
@@ -229,14 +229,14 @@ Cheap, readable, filterable by eye, and it does the job of structured fields in 
 
 ---
 
-## 6. Vendor-capture policy
+## 6. Inclusion policy
 
-Write this into `contributing.md` and enforce it. Both existing lists failed here in different ways.
+Write this into `contributing.md` and enforce it. Both existing lists drifted in different ways without one.
 
 1. **Self-submissions are welcome and must be disclosed.** Add `submitted_by_vendor: true` to the YAML. Not disqualifying — undisclosed is.
 2. **No category may be more than 50% one vendor's properties.** This is the rule that would have caught eliasstravik's 4/4 Clay "Learning" section.
 3. **Entries must be usable without a sales call.** Public docs, public pricing or a real free tier, or a public repo.
-4. **No listing-for-backlink.** An entry whose only distinguishing feature is that it exists gets declined with a pointer to this policy.
+4. **Every entry must earn its place.** Curation means the best, not everything.
 5. **Removal is normal, not punitive.** Archived, sunset, acquired-and-folded, or 12 months dark → removed by bot-opened issue, with a 14-day window to object.
 
 Publishing this policy is itself a differentiator. Neither existing list has one, and it is why both drifted.
@@ -252,13 +252,13 @@ Publishing this policy is itself a differentiator. Neither existing list has one
 | 3 | Full awesome-compliance kit (CC0, badge, topics, `contributing.md`, ToC, `main`) | 0.5d | **v0.1** |
 | 4 | `awesome-lint` + schema validation on PR | 0.5d | **v0.1** |
 | 5 | Category-minimum (3) enforced at build | 0.5d | **v0.1** |
-| 6 | Vendor-capture policy written and enforced | 0.5d | **v0.1** |
+| 6 | Inclusion policy written and enforced | 0.5d | **v0.1** |
 | 7 | Per-entry legend | 0.5d | **v0.1** |
 | 8 | Daily metadata refresh workflow | 1.5d | **v0.1** |
 | 9 | Dead-link check → auto-issue | 1d | v0.2 |
 | 10 | Staleness detection → auto-issue | 1d | v0.2 |
 | 11 | Public `index.json` | 0.5d | v0.2 |
-| 12 | Consolidation PR to `eliasstravik` | 0.5d | v0.2 |
+| 12 | Consolidation offer to `eliasstravik` | 0.5d | v0.2 |
 | 13 | Companion website off the same data | 4d | v0.3 |
 | 14 | Agent-PR lane (`🤖🤖🤖` convention, borrowed from awesome-mcp-servers) | 0.5d | v0.3 |
 | 15 | Submission to `sindresorhus/awesome` | 0.5d | **Blocked** — intake closed |
@@ -274,7 +274,7 @@ Publishing this policy is itself a differentiator. Neither existing list has one
 awesome-gtm-engineering/
 ├── README.md                   # GENERATED — do not hand-edit
 ├── license                     # CC0-1.0
-├── contributing.md             # includes the vendor-capture policy
+├── contributing.md             # includes the inclusion policy
 ├── code-of-conduct.md
 ├── .github/
 │   ├── workflows/{lint,build,metadata,linkcheck,staleness}.yml

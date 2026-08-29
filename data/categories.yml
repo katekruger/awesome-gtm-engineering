@@ -1,0 +1,45 @@
+# Order here is the order rendered in Contents and in the README.
+# min_entries is enforced by build/validate.py — a category below the
+# minimum fails the build rather than shipping as a stub section.
+- slug: enrichment-data
+  name: Enrichment & Data
+  min_entries: 3
+- slug: signals-intent
+  name: Signals & Intent
+  min_entries: 3
+- slug: outbound-sequencing
+  name: Outbound & Sequencing
+  min_entries: 3
+- slug: deliverability
+  name: Deliverability
+  min_entries: 3
+- slug: crm-data-quality
+  name: CRM & Data Quality
+  min_entries: 3
+- slug: routing-territory
+  name: Routing & Territory
+  min_entries: 3
+- slug: attribution-analytics
+  name: Attribution & Analytics
+  min_entries: 3
+- slug: revenue-data-modeling
+  name: Revenue Data Modeling
+  min_entries: 3
+- slug: agents-mcp-servers
+  name: Agents & MCP Servers
+  min_entries: 3
+- slug: workflow-automation
+  name: Workflow Automation
+  min_entries: 3
+- slug: research-scraping
+  name: Research & Scraping
+  min_entries: 3
+- slug: compensation-planning
+  name: Compensation & Planning
+  min_entries: 3
+- slug: learning
+  name: Learning
+  min_entries: 3
+- slug: communities
+  name: Communities
+  min_entries: 3

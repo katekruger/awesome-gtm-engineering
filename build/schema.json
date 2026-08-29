@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/katekruger/awesome-gtm-engineering/build/schema.json",
+  "title": "GTM engineering tool entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "website_url",
+    "description",
+    "categories",
+    "pricing_model",
+    "source_code_url",
+    "license",
+    "has_api",
+    "has_mcp_server",
+    "has_cli",
+    "self_hostable"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "website_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Z0-9].*\\.$"
+    },
+    "categories": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "pricing_model": {
+      "type": "string",
+      "enum": ["open_source", "commercial", "freemium", "open_core"]
+    },
+    "source_code_url": {
+      "type": ["string", "null"],
+      "format": "uri"
+    },
+    "license": {
+      "type": ["string", "null"]
+    },
+    "has_api": { "type": "boolean" },
+    "api_docs_url": { "type": ["string", "null"] },
+    "has_mcp_server": { "type": "boolean" },
+    "mcp_server_url": { "type": ["string", "null"] },
+    "mcp_server_kind": {
+      "type": ["string", "null"],
+      "enum": ["official", "community", "none", null]
+    },
+    "has_cli": { "type": "boolean" },
+    "self_hostable": { "type": "boolean" },
+    "submitted_by_vendor": { "type": "boolean" },
+    "stargazers_count": { "type": ["integer", "null"] },
+    "last_commit_at": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "current_release": { "type": ["string", "null"] }
+  }
+}

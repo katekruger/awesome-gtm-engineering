@@ -1,0 +1,35 @@
+name: Remove a tool
+description: Propose removing an entry — archived, sunset, acquired-and-folded, or 12+ months dark
+title: "Remove: "
+labels: ["remove-tool"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Tool name (must match data/tools/*.yml)
+    validations:
+      required: true
+  - type: dropdown
+    id: reason
+    attributes:
+      label: Reason
+      options:
+        - Archived
+        - Sunset / shut down
+        - Acquired and folded into another product
+        - No development activity for 12+ months
+        - Other (explain below)
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Link to the archived-repo banner, sunset announcement, or last-commit date.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Removal is normal, not punitive. This issue stays open for 14 days so the
+        maintainer or vendor can object before the entry is removed.

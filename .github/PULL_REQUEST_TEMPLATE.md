@@ -1,0 +1,5 @@
+- [ ] I added a YAML file in `data/tools/`, I did not edit `readme.md`
+- [ ] My entry is usable without a sales call (public docs, public pricing or a real free tier, or a public repo)
+- [ ] If this is my own product, I set `submitted_by_vendor: true`
+- [ ] My entry validates against `build/schema.json` (run `python build/validate.py`)
+- [ ] I did not add a CI badge, license text, or a "Contributing"/"Footnotes" ToC entry anywhere
