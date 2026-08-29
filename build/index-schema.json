@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/katekruger/awesome-gtm-engineering/build/index-schema.json",
+  "title": "awesome-gtm-engineering public dataset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "categories", "tools"],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slug", "name"],
+        "properties": {
+          "slug": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      }
+    },
+    "tools": {
+      "type": "array",
+      "items": { "$ref": "./schema.json" }
+    }
+  }
+}

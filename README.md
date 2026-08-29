@@ -7,6 +7,11 @@ tools GTM engineers actually run — including two categories no other GTM list
 covers yet: **Agents & MCP Servers** and **Revenue Data Modeling**, which is
 where 2026 GTM engineering increasingly happens.
 
+Every entry here is also published as structured data at
+[`data/index.json`](data/index.json) — stars, MCP status, pricing model, and
+all. It's public domain like the rest of this list: anyone may build on it,
+no attribution required.
+
 ## Contents
 
 - [Enrichment & Data](#enrichment--data)
