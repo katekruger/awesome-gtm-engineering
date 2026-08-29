@@ -1,0 +1,21 @@
+name: lemlist
+website_url: https://www.lemlist.com
+description: Multichannel outbound platform combining cold email, LinkedIn, and calling
+  into automated sequences.
+categories:
+- Outbound & Sequencing
+pricing_model: commercial
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://developer.lemlist.com/api-reference/getting-started/overview
+has_mcp_server: true
+mcp_server_url: https://help.lemlist.com/en/articles/13728466-set-up-the-lemlist-mcp-server-in-your-llm-client-oauth-or-api-key
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

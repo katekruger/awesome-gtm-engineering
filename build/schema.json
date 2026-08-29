@@ -46,9 +46,9 @@
     "license": {
       "type": ["string", "null"]
     },
-    "has_api": { "type": "boolean" },
+    "has_api": { "type": ["boolean", "null"] },
     "api_docs_url": { "type": ["string", "null"] },
-    "has_mcp_server": { "type": "boolean" },
+    "has_mcp_server": { "type": ["boolean", "null"] },
     "mcp_server_url": { "type": ["string", "null"] },
     "mcp_server_kind": {
       "type": ["string", "null"],

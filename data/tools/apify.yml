@@ -1,0 +1,21 @@
+name: Apify
+website_url: https://apify.com/
+description: Web scraping and automation platform running actors through an API-driven
+  marketplace.
+categories:
+- Research & Scraping
+pricing_model: freemium
+source_code_url: https://github.com/apify/apify-mcp-server
+license: MIT
+has_api: true
+api_docs_url: https://docs.apify.com/api/v2
+has_mcp_server: true
+mcp_server_url: https://mcp.apify.com
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: 5345
+last_commit_at: '2026-08-27'
+archived: false
+current_release: null

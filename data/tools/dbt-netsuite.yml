@@ -1,0 +1,21 @@
+name: dbt_netsuite
+website_url: https://fivetran.github.io/dbt_netsuite/
+description: A dbt package that models raw NetSuite ERP connector data into general
+  ledger and financial reporting marts.
+categories:
+- Revenue Data Modeling
+pricing_model: open_source
+source_code_url: https://github.com/fivetran/dbt_netsuite
+license: Apache-2.0
+has_api: false
+api_docs_url: null
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: true
+submitted_by_vendor: false
+stargazers_count: 57
+last_commit_at: '2026-08-28'
+archived: false
+current_release: v1.7.1

@@ -1,0 +1,21 @@
+name: Funnel
+website_url: https://funnel.io
+description: Marketing data hub that normalizes and blends data from 600-plus ad,
+  analytics, and CRM platforms.
+categories:
+- Attribution & Analytics
+pricing_model: commercial
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://help.funnel.io/the-funnel-api
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

@@ -1,0 +1,21 @@
+name: Common Room
+website_url: https://www.commonroom.io
+description: A customer and account intelligence platform unifying product usage,
+  community, website, and job-change signals.
+categories:
+- Signals & Intent
+pricing_model: commercial
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://www.commonroom.io/developers/
+has_mcp_server: true
+mcp_server_url: https://mcp.commonroom.io/mcp/
+mcp_server_kind: official
+has_cli: true
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

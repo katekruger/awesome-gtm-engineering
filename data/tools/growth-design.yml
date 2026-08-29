@@ -1,0 +1,21 @@
+name: Growth.Design
+website_url: https://growth.design
+description: Weekly comics and case studies teaching growth and product psychology
+  mental models.
+categories:
+- Learning
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: false
+api_docs_url: null
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

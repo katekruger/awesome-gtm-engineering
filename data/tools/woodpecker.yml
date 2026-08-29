@@ -1,0 +1,21 @@
+name: Woodpecker
+website_url: https://woodpecker.co
+description: Cold email and LinkedIn campaign automation with a conversational MCP
+  interface for agents.
+categories:
+- Outbound & Sequencing
+pricing_model: commercial
+source_code_url: https://github.com/Woodpeckerco/woodpecker-mcp-server
+license: null
+has_api: true
+api_docs_url: https://developers.woodpecker.co/docs/
+has_mcp_server: true
+mcp_server_url: https://developers.woodpecker.co/docs/mcp/
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: 1
+last_commit_at: '2025-07-29'
+archived: false
+current_release: null

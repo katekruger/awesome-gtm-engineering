@@ -1,0 +1,21 @@
+name: Leadfeeder
+website_url: https://www.leadfeeder.com
+description: Website visitor identification and account-level intent signals for sales
+  and marketing teams.
+categories:
+- Signals & Intent
+pricing_model: freemium
+source_code_url: null
+license: null
+has_api: true
+api_docs_url: https://docs.leadfeeder.com/api/public/introduction-354545m0
+has_mcp_server: null
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null

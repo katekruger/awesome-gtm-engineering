@@ -1,0 +1,21 @@
+name: ZeroBounce
+website_url: https://www.zerobounce.net
+description: Email validation and deliverability scoring service with bulk verification
+  and domain intelligence.
+categories:
+- Deliverability
+pricing_model: freemium
+source_code_url: https://github.com/zerobounce/zerobounce-mcp
+license: null
+has_api: true
+api_docs_url: https://www.zerobounce.net/docs/email-validation-api-quickstart/
+has_mcp_server: true
+mcp_server_url: https://zerobounce-mcp.com/
+mcp_server_kind: official
+has_cli: false
+self_hostable: false
+submitted_by_vendor: false
+stargazers_count: 2
+last_commit_at: '2026-08-18'
+archived: false
+current_release: null
