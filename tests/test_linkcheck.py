@@ -19,6 +19,9 @@ class FakeResponse:
     def json(self):
         return []
 
+    def close(self):
+        pass
+
 
 class FakeSession:
     """url -> list of status codes, consumed in order (repeats last if exhausted).
@@ -39,7 +42,7 @@ class FakeSession:
     def head(self, url, headers=None, timeout=None, allow_redirects=None):
         return self._next(url)
 
-    def get(self, url, headers=None, timeout=None, allow_redirects=None):
+    def get(self, url, headers=None, timeout=None, allow_redirects=None, stream=None):
         return self._next(url)
 
 
@@ -55,6 +58,23 @@ def test_check_url_dead_on_404():
 
 def test_check_url_dead_on_connection_error():
     session = FakeSession({"https://a.example": ["raise"]})
+    assert linkcheck.check_url("https://a.example", session, sleep=lambda s: None) == "dead"
+
+
+def test_check_url_inconclusive_on_401():
+    # Live API/MCP endpoints routinely 401 a bare unauthenticated request —
+    # that's not a dead link, it's the server correctly enforcing auth.
+    session = FakeSession({"https://a.example": [401]})
+    assert linkcheck.check_url("https://a.example", session, sleep=lambda s: None) == "inconclusive"
+
+
+def test_check_url_inconclusive_on_403():
+    session = FakeSession({"https://a.example": [403]})
+    assert linkcheck.check_url("https://a.example", session, sleep=lambda s: None) == "inconclusive"
+
+
+def test_check_url_dead_on_410():
+    session = FakeSession({"https://a.example": [410]})
     assert linkcheck.check_url("https://a.example", session, sleep=lambda s: None) == "dead"
 
 
@@ -141,6 +161,20 @@ def test_server_error_recovery_resets_state(tmp_path, tool_factory):
         dead, _ = linkcheck.check_all(tools_dir, state=state)
     assert dead == []
     assert "a.yml|website_url" not in state
+
+
+def test_inconclusive_never_filed(tmp_path, tool_factory):
+    import yaml
+
+    tools_dir = tmp_path / "tools"
+    tools_dir.mkdir()
+    tool = tool_factory(name="A", website_url="https://real-but-auth-gated.example")
+    (tools_dir / "a.yml").write_text(yaml.safe_dump(tool))
+
+    with patch.object(linkcheck, "check_url", return_value="inconclusive"):
+        dead, skipped = linkcheck.check_all(tools_dir, state={})
+    assert dead == []
+    assert len(skipped) == 1
 
 
 def test_rate_limited_never_filed(tmp_path, tool_factory):

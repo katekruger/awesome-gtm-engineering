@@ -45,6 +45,13 @@ def test_recent_commit_not_flagged(tmp_path):
     assert staleness.find_stale(tools_dir, AS_OF) == []
 
 
+def test_bare_date_last_commit_at_does_not_crash(tmp_path):
+    tools_dir = tmp_path / "tools"
+    tools_dir.mkdir()
+    write_tool(tools_dir, "a.yml", last_commit_at="2026-08-29")
+    assert staleness.find_stale(tools_dir, AS_OF) == []
+
+
 def test_stale_commit_flagged(tmp_path):
     tools_dir = tmp_path / "tools"
     tools_dir.mkdir()

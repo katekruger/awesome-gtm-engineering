@@ -28,9 +28,22 @@ Handling, per field failure mode:
                                                dead link. Consecutive-failure
                                                counts persist across runs in
                                                a small state file.
-  - anything else that fails to resolve    -> filed immediately (404, DNS
-    (404, connection error, timeout, etc.)    failure, non-allowlisted 403,
-                                               etc. are all unambiguous).
+  - any other 4xx (401, 403, 405, 406, ...) -> skipped and noted, never
+                                               filed. A live API or MCP
+                                               endpoint routinely answers
+                                               with one of these to a bare
+                                               unauthenticated request —
+                                               that's evidence the server is
+                                               up, not that the link is dead.
+                                               Confirmed empirically: real
+                                               endpoints for HubSpot, Clay,
+                                               and Common Room all 401 a
+                                               plain GET.
+  - 404 or 410                             -> filed immediately, the one
+                                               unambiguous "this doesn't
+                                               exist" signal, along with a
+                                               connection error/timeout/DNS
+                                               failure.
 
 One issue per (entry, field), deduplicated by exact title so a standing
 dead link doesn't get re-filed every week until someone acts on it.
@@ -85,14 +98,36 @@ def save_state(state_file, state):
         f.write("\n")
 
 
+# Status codes that unambiguously mean "this resource does not exist" for a
+# bare, unauthenticated HEAD/GET. Deliberately narrow: a live API or MCP
+# endpoint routinely answers 401/403/405/406 to a request with no auth
+# header or wrong Accept/method — that's evidence the server is up and
+# enforcing its own protocol, not evidence the link is dead. Treating those
+# as "dead" produces exactly the false-positive flood this project can't
+# afford (verified empirically: real, working MCP endpoints for HubSpot,
+# Clay, and Common Room all 401 a plain GET). Only 404/410 are conclusive.
+DEAD_STATUS_CODES = {404, 410}
+
+
 def check_url(url, session, sleep=time.sleep, max_retries=3):
-    """Returns one of: 'ok', 'rate_limited', 'dead', 'server_error'."""
+    """Returns one of: 'ok', 'rate_limited', 'dead', 'server_error', 'inconclusive'.
+
+    Uses GET, not HEAD: verified empirically that some real doc sites (e.g.
+    Salesforce's developer docs) return a bare 404 to HEAD while GET works
+    fine — HEAD support is inconsistent enough across the wild diversity of
+    hosts this list points to that it isn't a safe primary probe.
+
+    Streams the response and never reads the body — status_code is
+    available as soon as headers arrive, so this doesn't download full
+    pages, and critically it doesn't hang on an SSE/streaming MCP endpoint
+    that holds the connection open (confirmed: a plain GET without
+    stream=True times out completely against smartlead's SSE MCP URL,
+    which would misclassify a live streaming endpoint as dead)."""
     headers = {"User-Agent": USER_AGENT}
     for attempt in range(max_retries + 1):
         try:
-            resp = session.head(url, headers=headers, timeout=15, allow_redirects=True)
-            if resp.status_code == 405 or resp.status_code == 501:
-                resp = session.get(url, headers=headers, timeout=15, allow_redirects=True)
+            resp = session.get(url, headers=headers, timeout=15, allow_redirects=True, stream=True)
+            resp.close()
         except requests.RequestException:
             return "dead"
 
@@ -108,7 +143,13 @@ def check_url(url, session, sleep=time.sleep, max_retries=3):
         if resp.status_code >= 500:
             return "server_error"
 
-        return "dead"
+        if resp.status_code in DEAD_STATUS_CODES:
+            return "dead"
+
+        # Any other 4xx (401, 403, 405, 406, ...): the server responded, it
+        # just didn't like an unauthenticated bare request — not evidence
+        # of a dead link.
+        return "inconclusive"
 
     return "rate_limited"
 
@@ -144,6 +185,11 @@ def check_all(tools_dir, state, session=None, sleep=time.sleep):
 
             if result == "rate_limited":
                 skipped.append(f"{path.name}:{field} — still 429 after retries, skipped this run")
+                continue
+
+            if result == "inconclusive":
+                state.pop(state_key, None)
+                skipped.append(f"{path.name}:{field} — server responded but rejected an unauthenticated request, not filed as dead")
                 continue
 
             if result == "server_error":
