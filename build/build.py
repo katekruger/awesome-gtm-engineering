@@ -6,12 +6,15 @@ anything here that depends on wall-clock time, random ordering, or
 filesystem iteration order.
 """
 import argparse
+import json
 import pathlib
 import re
 import sys
 
 import jinja2
 import yaml
+
+INDEX_SCHEMA_VERSION = 1
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = pathlib.Path(__file__).resolve().parent / "templates"
@@ -103,16 +106,41 @@ def build(categories_file, tools_dir):
     return render(grouped), len(tools), len(grouped)
 
 
+def build_index(categories_file, tools_dir):
+    """Builds the public data/index.json payload — the list as a dataset,
+    not just a document. Deterministic for the same reason build() is:
+    tools sorted alphabetically, no wall-clock timestamps."""
+    categories = load_categories(categories_file)
+    tools = load_tools(tools_dir)
+
+    clean_tools = []
+    for tool in sorted(tools, key=lambda t: t["name"].casefold()):
+        clean = {k: v for k, v in tool.items() if k != "_source"}
+        clean_tools.append(clean)
+
+    index = {
+        "schema_version": INDEX_SCHEMA_VERSION,
+        "categories": [{"slug": c["slug"], "name": c["name"]} for c in categories],
+        "tools": clean_tools,
+    }
+    return json.dumps(index, indent=2, sort_keys=False) + "\n"
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--categories-file", default=str(ROOT / "data" / "categories.yml"))
     parser.add_argument("--tools-dir", default=str(ROOT / "data" / "tools"))
     parser.add_argument("--output", default=str(ROOT / "README.md"))
+    parser.add_argument("--index-output", default=str(ROOT / "data" / "index.json"))
     args = parser.parse_args(argv)
 
     output, tool_count, category_count = build(args.categories_file, args.tools_dir)
     pathlib.Path(args.output).write_text(output)
     print(f"wrote {args.output} — {tool_count} entries across {category_count} categories")
+
+    index_output = build_index(args.categories_file, args.tools_dir)
+    pathlib.Path(args.index_output).write_text(index_output)
+    print(f"wrote {args.index_output}")
 
 
 if __name__ == "__main__":

@@ -112,10 +112,14 @@ def open_removal_issue(owner, repo, tool_name, token):
 
 
 def refresh(tools_dir, token):
-    """Returns (updated_count, notes). Writes files as it goes — each file
-    is only ever written with a complete, successfully fetched block."""
+    """Returns (updated_count, notes, rate_limited). Writes files as it goes
+    — each file is only ever written with a complete, successfully fetched
+    block. rate_limited is True if the run was cut short by the API, which
+    the caller must treat as a failed run: nothing from this run should be
+    committed, partial batch or not."""
     notes = []
     updated = 0
+    rate_limited = False
 
     for path in sorted(pathlib.Path(tools_dir).glob("*.yml")):
         with open(path) as f:
@@ -130,6 +134,7 @@ def refresh(tools_dir, token):
             metadata = fetch_repo_metadata(owner, repo, token)
         except RateLimited as e:
             notes.append(f"rate limited, stopping (resets at {e.args[0]})")
+            rate_limited = True
             break
         except requests.HTTPError as e:
             notes.append(f"{path.name}: {e}")
@@ -154,7 +159,7 @@ def refresh(tools_dir, token):
             yaml.safe_dump(tool, f, sort_keys=False)
         updated += 1
 
-    return updated, notes
+    return updated, notes, rate_limited
 
 
 def main(argv=None):
@@ -167,11 +172,19 @@ def main(argv=None):
         print("GITHUB_TOKEN not set", file=sys.stderr)
         return 1
 
-    updated, notes = refresh(args.tools_dir, token)
+    updated, notes, rate_limited = refresh(args.tools_dir, token)
 
     print(f"refreshed metadata for {updated} entries")
     for note in notes:
         print(f"  - {note}")
+
+    if rate_limited:
+        print(
+            "Rate limited before finishing the batch — failing the run so "
+            "the caller does not commit a partial refresh.",
+            file=sys.stderr,
+        )
+        return 1
     return 0
 
 

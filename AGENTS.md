@@ -1,7 +1,12 @@
 # Agent instructions for this repo
 
-- `readme.md` is **generated**. Never hand-edit it — edit `data/tools/*.yml`
-  and `data/categories.yml` instead, then run `python build/build.py`.
+- `readme.md` and `data/index.json` are both **generated**. Never hand-edit
+  either — edit `data/tools/*.yml` and `data/categories.yml` instead, then
+  run `python build/build.py`. `data/index.json` is the public dataset form
+  of this list — same content, structured, freely reusable.
+- `stargazers_count`, `last_commit_at`, `archived`, and `current_release` in
+  `data/tools/*.yml` are written only by `build/refresh_metadata.py` (daily,
+  in CI). Never hand-edit them either.
 - Curation is a **human decision**. Automation refreshes metadata
   (`build/refresh_metadata.py`) and enforces structural rules
   (`build/validate.py`); it never decides what belongs on the list.
