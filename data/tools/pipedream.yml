@@ -8,7 +8,7 @@ pricing_model: freemium
 source_code_url: null
 license: null
 has_api: true
-api_docs_url: https://pipedream.com/docs/api/rest/
+api_docs_url: https://pipedream.com/docs/rest-api
 has_mcp_server: true
 mcp_server_url: https://pipedream.com/docs/connect/mcp
 mcp_server_kind: official

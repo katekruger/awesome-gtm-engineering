@@ -27,7 +27,13 @@ STALE_AFTER_DAYS = 365
 def parse_timestamp(value):
     if not value:
         return None
-    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        # last_commit_at is sometimes a bare date (e.g. seed data written
+        # before the first real GitHub API refresh) — treat as UTC rather
+        # than crash comparing a naive datetime against an aware one.
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
 
 
 def find_stale(tools_dir, as_of):
