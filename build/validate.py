@@ -17,6 +17,7 @@ import argparse
 import json
 import pathlib
 import sys
+from urllib.parse import urlparse
 
 import jsonschema
 import yaml
@@ -25,6 +26,62 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SCHEMA_FILE = pathlib.Path(__file__).resolve().parent / "schema.json"
 
 DASH_CHARS = {"–": "en dash (–)", "—": "em dash (—)"}
+
+GITHUB_HOSTS = {"github.com", "www.github.com"}
+
+
+def _domain_key(host):
+    """Best-effort SLD extraction from a hostname (e.g. 'acme' from
+    'www.acme.com'). Not a real eTLD+1 parser — this repo has no public
+    suffix list dependency — but it is enough to match a vendor's website
+    against their GitHub owner login, which is all this rule needs."""
+    labels = [label for label in host.split(".") if label]
+    if labels and labels[0] == "www":
+        labels = labels[1:]
+    if not labels:
+        return None
+    return labels[0] if len(labels) == 1 else labels[-2]
+
+
+def vendor_key(tool, sentinel):
+    """Best-effort owner of an entry's properties.
+
+    Not the submitter. The policy in docs/curation-policy.md is about who
+    OWNS the tools in a category, which self-reporting cannot establish:
+    a curator adding four of one vendor's packages produces exactly the
+    monoculture the policy forbids, with submitted_by_vendor false on all
+    four.
+
+    Derived from the registrable domain of source_code_url, falling back
+    to website_url. A github.com or *.github.io URL yields the owner/org
+    login instead, since github.com is the registrable domain for every
+    GitHub-hosted entry and would otherwise collapse the whole list into
+    one vendor. An entry with no resolvable domain gets a sentinel unique
+    to it, so it never accidentally clusters with another such entry.
+    """
+    for url in (tool.get("source_code_url"), tool.get("website_url")):
+        if not url:
+            continue
+        try:
+            host = urlparse(url).netloc.lower()
+        except ValueError:
+            host = ""
+        if not host:
+            continue
+        if host in GITHUB_HOSTS:
+            owner = next((p for p in urlparse(url).path.split("/") if p), None)
+            if owner:
+                return owner.casefold()
+            continue
+        if host.endswith(".github.io"):
+            owner = host[: -len(".github.io")]
+            if owner:
+                return owner.casefold()
+            continue
+        domain = _domain_key(host)
+        if domain:
+            return domain
+    return f"__no-vendor-url__:{sentinel}"
 
 
 def load_schema(schema_file):
@@ -66,7 +123,7 @@ def validate(categories_file, tools_dir, schema_file=SCHEMA_FILE):
     category_names = {c["name"] for c in categories}
 
     counts = {c["name"]: 0 for c in categories}
-    vendor_counts = {c["name"]: 0 for c in categories}
+    vendor_counts = {c["name"]: {} for c in categories}
 
     seen_urls = {}
     seen_names = {}
@@ -98,13 +155,13 @@ def validate(categories_file, tools_dir, schema_file=SCHEMA_FILE):
         else:
             seen_names[name_key] = path.name
 
+        key = vendor_key(tool, sentinel=path.name)
         for cat_name in tool["categories"]:
             if cat_name not in category_names:
                 errors.append(f"{path.name}: unknown category {cat_name!r}")
                 continue
             counts[cat_name] += 1
-            if tool.get("submitted_by_vendor"):
-                vendor_counts[cat_name] += 1
+            vendor_counts[cat_name][key] = vendor_counts[cat_name].get(key, 0) + 1
 
     for cat in categories:
         name, minimum = cat["name"], cat["min_entries"]
@@ -113,11 +170,15 @@ def validate(categories_file, tools_dir, schema_file=SCHEMA_FILE):
                 f"category {name!r} has {counts[name]} entries, "
                 f"needs at least {minimum}"
             )
-        elif vendor_counts[name] * 2 > counts[name]:
-            errors.append(
-                f"category {name!r} is more than 50% one vendor's "
-                f"self-submissions ({vendor_counts[name]}/{counts[name]})"
+        else:
+            top_vendor, top_count = max(
+                vendor_counts[name].items(), key=lambda kv: kv[1], default=(None, 0)
             )
+            if top_count * 2 > counts[name]:
+                errors.append(
+                    f"category {name!r} is more than 50% one vendor's "
+                    f"properties ({top_vendor}: {top_count}/{counts[name]})"
+                )
 
     return errors, len(tool_files), len(categories)
 

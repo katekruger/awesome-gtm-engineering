@@ -90,16 +90,71 @@ def test_en_dash_in_description_fails(workspace, tool_factory):
     assert any("en dash" in e for e in errors)
 
 
-def test_vendor_capture_over_50_percent_fails(workspace, tool_factory):
+def test_vendor_capture_disclosure_flag_alone_does_not_trigger(workspace, tool_factory):
+    # submitted_by_vendor is a disclosure field, not the input to the 50%
+    # rule — three different vendors, all self-disclosed, must not trip it.
     categories_file, tools_dir = workspace(
         tools=[
             tool_factory(name="A", website_url="https://a.example", submitted_by_vendor=True),
             tool_factory(name="B", website_url="https://b.example", submitted_by_vendor=True),
-            tool_factory(name="C", website_url="https://c.example"),
+            tool_factory(name="C", website_url="https://c.example", submitted_by_vendor=True),
         ]
     )
     errors, _, _ = validate_module.validate(categories_file, tools_dir)
-    assert any("50%" in e for e in errors)
+    assert not any("50%" in e for e in errors)
+
+
+def test_vendor_capture_4_of_4_one_github_owner_fails(workspace, tool_factory):
+    categories_file, tools_dir = workspace(
+        tools=[
+            tool_factory(name="A", website_url="https://a.example", source_code_url="https://github.com/acme/a"),
+            tool_factory(name="B", website_url="https://b.example", source_code_url="https://github.com/acme/b"),
+            tool_factory(name="C", website_url="https://c.example", source_code_url="https://github.com/acme/c"),
+            tool_factory(name="D", website_url="https://d.example", source_code_url="https://github.com/acme/d"),
+        ]
+    )
+    errors, _, _ = validate_module.validate(categories_file, tools_dir)
+    assert any("50%" in e and "acme" in e for e in errors)
+
+
+def test_vendor_capture_2_of_5_passes(workspace, tool_factory):
+    categories_file, tools_dir = workspace(
+        tools=[
+            tool_factory(name="A", website_url="https://a.example", source_code_url="https://github.com/acme/a"),
+            tool_factory(name="B", website_url="https://b.example", source_code_url="https://github.com/acme/b"),
+            tool_factory(name="C", website_url="https://c.example"),
+            tool_factory(name="D", website_url="https://d.example"),
+            tool_factory(name="E", website_url="https://e.example"),
+        ]
+    )
+    errors, _, _ = validate_module.validate(categories_file, tools_dir)
+    assert not any("50%" in e for e in errors)
+
+
+def test_vendor_capture_3_of_5_fails(workspace, tool_factory):
+    categories_file, tools_dir = workspace(
+        tools=[
+            tool_factory(name="A", website_url="https://a.example", source_code_url="https://github.com/acme/a"),
+            tool_factory(name="B", website_url="https://b.example", source_code_url="https://github.com/acme/b"),
+            tool_factory(name="C", website_url="https://c.example", source_code_url="https://github.com/acme/c"),
+            tool_factory(name="D", website_url="https://d.example"),
+            tool_factory(name="E", website_url="https://e.example"),
+        ]
+    )
+    errors, _, _ = validate_module.validate(categories_file, tools_dir)
+    assert any("50%" in e and "acme" in e for e in errors)
+
+
+def test_vendor_key_recognizes_same_vendor_across_url_shapes():
+    github_entry = {"source_code_url": "https://github.com/acme/x", "website_url": "https://x.example"}
+    website_entry = {"source_code_url": None, "website_url": "https://acme.com"}
+    assert validate_module.vendor_key(github_entry, "a") == validate_module.vendor_key(website_entry, "b")
+
+
+def test_vendor_key_no_url_does_not_cluster():
+    entry_a = {"source_code_url": None, "website_url": "https://"}
+    entry_b = {"source_code_url": None, "website_url": "https://"}
+    assert validate_module.vendor_key(entry_a, "a") != validate_module.vendor_key(entry_b, "b")
 
 
 def test_unknown_category_fails(workspace, tool_factory):

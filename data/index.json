@@ -290,6 +290,29 @@
       "current_release": null
     },
     {
+      "name": "Coalesce",
+      "website_url": "https://coalesce.io",
+      "description": "A visual, Git-native data transformation platform purpose-built for Snowflake, used to build and document revenue and CRM data models at scale.",
+      "categories": [
+        "Revenue Data Modeling"
+      ],
+      "pricing_model": "freemium",
+      "source_code_url": null,
+      "license": null,
+      "has_api": true,
+      "api_docs_url": "https://docs.coalesce.io/docs/api",
+      "has_mcp_server": true,
+      "mcp_server_url": "https://docs.coalesce.io/docs/catalog/developer/mcp-integration",
+      "mcp_server_kind": "official",
+      "has_cli": true,
+      "self_hostable": false,
+      "submitted_by_vendor": false,
+      "stargazers_count": null,
+      "last_commit_at": null,
+      "archived": null,
+      "current_release": null
+    },
+    {
       "name": "Common Room",
       "website_url": "https://www.commonroom.io",
       "description": "A customer and account intelligence platform unifying product usage, community, website, and job-change signals.",
@@ -727,6 +750,29 @@
       "current_release": null
     },
     {
+      "name": "Hightouch",
+      "website_url": "https://hightouch.com",
+      "description": "A vendor-neutral reverse ETL platform that models and syncs warehouse revenue data into CRMs, ad platforms, and other business tools.",
+      "categories": [
+        "Revenue Data Modeling"
+      ],
+      "pricing_model": "freemium",
+      "source_code_url": null,
+      "license": null,
+      "has_api": true,
+      "api_docs_url": "https://hightouch.com/docs",
+      "has_mcp_server": true,
+      "mcp_server_url": "https://hightouch.com/docs/ai-integrations/mcp",
+      "mcp_server_kind": "official",
+      "has_cli": true,
+      "self_hostable": false,
+      "submitted_by_vendor": false,
+      "stargazers_count": null,
+      "last_commit_at": null,
+      "archived": null,
+      "current_release": null
+    },
+    {
       "name": "HockeyStack",
       "website_url": "https://www.hockeystack.com",
       "description": "B2B revenue analytics platform for attribution, buyer journeys, and account-level scoring.",
@@ -1049,6 +1095,29 @@
       "current_release": null
     },
     {
+      "name": "pipeline-waterfall",
+      "website_url": "https://github.com/katekruger/pipeline-waterfall",
+      "description": "A dbt package for B2B bookings and pipeline waterfall analytics, reconciling stage movement between created, advanced, won, lost, and reopened.",
+      "categories": [
+        "Revenue Data Modeling"
+      ],
+      "pricing_model": "open_source",
+      "source_code_url": "https://github.com/katekruger/pipeline-waterfall",
+      "license": "Apache-2.0",
+      "has_api": false,
+      "api_docs_url": null,
+      "has_mcp_server": false,
+      "mcp_server_url": null,
+      "mcp_server_kind": "none",
+      "has_cli": false,
+      "self_hostable": true,
+      "submitted_by_vendor": true,
+      "stargazers_count": null,
+      "last_commit_at": null,
+      "archived": null,
+      "current_release": null
+    },
+    {
       "name": "Postmark",
       "website_url": "https://postmarkapp.com",
       "description": "Transactional email delivery service with bounce, suppression, and diagnostic tooling built by ActiveCampaign.",
@@ -1295,6 +1364,29 @@
       "mcp_server_kind": "official",
       "has_cli": false,
       "self_hostable": false,
+      "submitted_by_vendor": false,
+      "stargazers_count": null,
+      "last_commit_at": null,
+      "archived": null,
+      "current_release": null
+    },
+    {
+      "name": "SQLMesh",
+      "website_url": "https://sqlmesh.readthedocs.io/en/stable/",
+      "description": "An open source data transformation framework with column-level lineage and virtual environments, built as a backward-compatible alternative to dbt.",
+      "categories": [
+        "Revenue Data Modeling"
+      ],
+      "pricing_model": "open_source",
+      "source_code_url": "https://github.com/TobikoData/sqlmesh",
+      "license": "Apache-2.0",
+      "has_api": false,
+      "api_docs_url": null,
+      "has_mcp_server": false,
+      "mcp_server_url": null,
+      "mcp_server_kind": "none",
+      "has_cli": true,
+      "self_hostable": true,
       "submitted_by_vendor": false,
       "stargazers_count": null,
       "last_commit_at": null,

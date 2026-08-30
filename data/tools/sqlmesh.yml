@@ -1,0 +1,21 @@
+name: SQLMesh
+website_url: https://sqlmesh.readthedocs.io/en/stable/
+description: An open source data transformation framework with column-level lineage
+  and virtual environments, built as a backward-compatible alternative to dbt.
+categories:
+- Revenue Data Modeling
+pricing_model: open_source
+source_code_url: https://github.com/TobikoData/sqlmesh
+license: Apache-2.0
+has_api: false
+api_docs_url: null
+has_mcp_server: false
+mcp_server_url: null
+mcp_server_kind: none
+has_cli: true
+self_hostable: true
+submitted_by_vendor: false
+stargazers_count: null
+last_commit_at: null
+archived: null
+current_release: null
