@@ -2,9 +2,24 @@ import sys
 import pathlib
 from unittest.mock import patch
 
+import pytest
+
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "build"))
 
 import refresh_metadata  # noqa: E402
+
+
+class FakeResp:
+    def __init__(self, status_code, headers=None, json_data=None):
+        self.status_code = status_code
+        self.headers = headers or {}
+        self._json = json_data or {}
+
+    def json(self):
+        return self._json
+
+    def raise_for_status(self):
+        pass
 
 
 def write_tool(tools_dir, filename, source_code_url):
@@ -104,3 +119,41 @@ def test_removal_issue_deduplicated_across_runs(tmp_path, monkeypatch):
         refresh_metadata.refresh(tools_dir, "fake-token")
 
     assert len(created_titles) == 1
+
+
+def test_429_raises_rate_limited(monkeypatch):
+    monkeypatch.setattr(refresh_metadata.requests, "get", lambda *a, **k: FakeResp(429))
+    with pytest.raises(refresh_metadata.RateLimited):
+        refresh_metadata.fetch_repo_metadata("a", "a", "fake-token")
+
+
+def test_403_remaining_zero_raises_rate_limited(monkeypatch):
+    monkeypatch.setattr(
+        refresh_metadata.requests,
+        "get",
+        lambda *a, **k: FakeResp(403, {"X-RateLimit-Remaining": "0"}),
+    )
+    with pytest.raises(refresh_metadata.RateLimited):
+        refresh_metadata.fetch_repo_metadata("a", "a", "fake-token")
+
+
+def test_429_honours_retry_after(monkeypatch):
+    monkeypatch.setattr(
+        refresh_metadata.requests,
+        "get",
+        lambda *a, **k: FakeResp(429, {"Retry-After": "30"}),
+    )
+    with pytest.raises(refresh_metadata.RateLimited) as exc_info:
+        refresh_metadata.fetch_repo_metadata("a", "a", "fake-token")
+    assert exc_info.value.args[0] == "30"
+
+
+def test_429_on_release_endpoint_raises_rate_limited(monkeypatch):
+    responses = [FakeResp(200, json_data={"full_name": "a/a", "stargazers_count": 1, "pushed_at": "x", "archived": False}), FakeResp(429, {"Retry-After": "5"})]
+
+    def fake_get(*a, **k):
+        return responses.pop(0)
+
+    monkeypatch.setattr(refresh_metadata.requests, "get", fake_get)
+    with pytest.raises(refresh_metadata.RateLimited):
+        refresh_metadata.fetch_repo_metadata("a", "a", "fake-token")

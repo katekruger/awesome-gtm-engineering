@@ -21,8 +21,8 @@ Edge cases:
                                                and the rename is noted in the
                                                summary so it can go in the
                                                commit message.
-  - GitHub API rate limit                  -> stop immediately; nothing
-                                               already fetched this run is
+  - GitHub API rate limit (403 primary or  -> stop immediately; nothing
+    429 secondary, whichever is hit)          already fetched this run is
                                                written to disk, so a half
                                                -refreshed file never gets
                                                committed.
@@ -61,12 +61,24 @@ def parse_owner_repo(source_code_url):
     return match.groups() if match else None
 
 
+def _raise_if_rate_limited(resp):
+    """GitHub returns 403-with-remaining-zero for the primary rate limit and
+    429 for secondary rate limits — the one you actually hit refreshing 62
+    repos in a loop. Both must stop the run immediately; only 403 was
+    handled before, so a 429 fell through to a partial refresh getting
+    committed."""
+    is_primary = resp.status_code == 403 and resp.headers.get("X-RateLimit-Remaining") == "0"
+    is_secondary = resp.status_code == 429
+    if is_primary or is_secondary:
+        reset = resp.headers.get("Retry-After") or resp.headers.get("X-RateLimit-Reset")
+        raise RateLimited(reset)
+
+
 def fetch_repo_metadata(owner, repo, token):
     headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
     resp = requests.get(f"{GITHUB_API}/repos/{owner}/{repo}", headers=headers, timeout=30)
 
-    if resp.status_code == 403 and resp.headers.get("X-RateLimit-Remaining") == "0":
-        raise RateLimited(resp.headers.get("X-RateLimit-Reset"))
+    _raise_if_rate_limited(resp)
     if resp.status_code == 404:
         return None
 
@@ -77,8 +89,7 @@ def fetch_repo_metadata(owner, repo, token):
     release_resp = requests.get(
         f"{GITHUB_API}/repos/{owner}/{repo}/releases/latest", headers=headers, timeout=30
     )
-    if release_resp.status_code == 403 and release_resp.headers.get("X-RateLimit-Remaining") == "0":
-        raise RateLimited(release_resp.headers.get("X-RateLimit-Reset"))
+    _raise_if_rate_limited(release_resp)
     if release_resp.status_code == 200:
         release = release_resp.json().get("tag_name")
 
