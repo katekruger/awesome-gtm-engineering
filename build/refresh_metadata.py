@@ -107,8 +107,6 @@ def open_removal_issue(owner, repo, tool_name, token, existing_titles):
     linkcheck.py and staleness.py use — without it, one 404'd repo files a
     new issue every single day the refresh workflow runs."""
     target_repo = os.environ.get("GITHUB_REPOSITORY")
-    if not target_repo:
-        return
     title = f"Remove: {tool_name}"
     body = (
         f"`{tool_name}`'s source repo `{owner}/{repo}` returned 404 "
@@ -132,11 +130,12 @@ def refresh(tools_dir, token):
     rate_limited = False
 
     target_repo = os.environ.get("GITHUB_REPOSITORY")
-    existing_titles = (
-        github_issues.list_open_issue_titles(target_repo, "removal-review", token)
-        if target_repo
-        else set()
-    )
+    # Fetched lazily, on the first 404, and cached for the rest of the run —
+    # not eagerly here. GITHUB_REPOSITORY is set on every GitHub Actions
+    # runner by default, including in this project's own test suite runs,
+    # so fetching unconditionally turned every CI test run into a live,
+    # unmocked API call.
+    existing_titles = None
 
     for path in sorted(pathlib.Path(tools_dir).glob("*.yml")):
         with open(path) as f:
@@ -159,7 +158,12 @@ def refresh(tools_dir, token):
 
         if metadata is None:
             notes.append(f"{path.name}: {owner}/{repo} returned 404 — flagged for removal")
-            open_removal_issue(owner, repo, tool["name"], token, existing_titles)
+            if target_repo:
+                if existing_titles is None:
+                    existing_titles = github_issues.list_open_issue_titles(
+                        target_repo, "removal-review", token
+                    )
+                open_removal_issue(owner, repo, tool["name"], token, existing_titles)
             continue
 
         full_name = metadata.pop("full_name")

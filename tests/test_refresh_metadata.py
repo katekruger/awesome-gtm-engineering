@@ -121,6 +121,32 @@ def test_removal_issue_deduplicated_across_runs(tmp_path, monkeypatch):
     assert len(created_titles) == 1
 
 
+def test_no_removal_issue_lookup_when_nothing_404s(tmp_path, monkeypatch):
+    """GITHUB_REPOSITORY is set on every GitHub Actions runner by default —
+    including this project's own CI test runs — so fetching existing_titles
+    eagerly turned every CI run into a live, unmocked GitHub API call and
+    broke three unrelated tests with a 401. It must only be fetched when a
+    404 actually needs to file a removal issue."""
+    tools_dir = tmp_path / "tools"
+    tools_dir.mkdir()
+    write_tool(tools_dir, "a.yml", "https://github.com/a/a")
+
+    monkeypatch.setenv("GITHUB_REPOSITORY", "katekruger/awesome-gtm-engineering")
+
+    metadata = {
+        "full_name": "a/a",
+        "stargazers_count": 1,
+        "last_commit_at": "x",
+        "archived": False,
+        "current_release": None,
+    }
+    with patch.object(refresh_metadata, "fetch_repo_metadata", return_value=metadata), \
+        patch("github_issues.list_open_issue_titles") as mock_list:
+        refresh_metadata.refresh(tools_dir, "fake-token")
+
+    mock_list.assert_not_called()
+
+
 def test_429_raises_rate_limited(monkeypatch):
     monkeypatch.setattr(refresh_metadata.requests, "get", lambda *a, **k: FakeResp(429))
     with pytest.raises(refresh_metadata.RateLimited):
