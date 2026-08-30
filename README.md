@@ -76,10 +76,14 @@ no attribution required.
 - [Windsor.ai](https://windsor.ai) - No-code ELT connector platform with multi-touch attribution across 350-plus marketing and revenue data sources. 🧩🔌🎖️🤖
 ## Revenue Data Modeling
 
+- [Coalesce](https://coalesce.io) - A visual, Git-native data transformation platform purpose-built for Snowflake, used to build and document revenue and CRM data models at scale. 🧩🔌🎖️🤖⌨️
 - [dbt_hubspot](https://fivetran.github.io/dbt_hubspot/) - A dbt package that transforms raw HubSpot connector data into staging and modeled marts for contacts, companies, deals, and engagements. 🔓🏠
 - [dbt_netsuite](https://fivetran.github.io/dbt_netsuite/) - A dbt package that models raw NetSuite ERP connector data into general ledger and financial reporting marts. 🔓🏠
 - [dbt_salesforce](https://fivetran.github.io/dbt_salesforce/) - A dbt package that models raw Salesforce CRM connector data into a ready-to-query revenue and pipeline data model. 🔓🏠
 - [dbt_stripe](https://fivetran.github.io/dbt_stripe/) - A dbt package that transforms raw Stripe connector data into MRR and revenue-recognition-ready marts. 🔓🏠
+- [Hightouch](https://hightouch.com) - A vendor-neutral reverse ETL platform that models and syncs warehouse revenue data into CRMs, ad platforms, and other business tools. 🧩🔌🎖️🤖⌨️
+- [pipeline-waterfall](https://github.com/katekruger/pipeline-waterfall) - A dbt package for B2B bookings and pipeline waterfall analytics, reconciling stage movement between created, advanced, won, lost, and reopened. 🔓🏠
+- [SQLMesh](https://sqlmesh.readthedocs.io/en/stable/) - An open source data transformation framework with column-level lineage and virtual environments, built as a backward-compatible alternative to dbt. 🔓⌨️🏠
 ## Agents & MCP Servers
 
 - [Apollo.io MCP Server](https://docs.apollo.io/docs/apollo-mcp) - A first-party MCP server connecting Apollo's contact database, enrichment engine, and sequencing to AI agents. 🧩🔌🎖️🤖
