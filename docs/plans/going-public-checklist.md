@@ -12,7 +12,7 @@ below is true — see `BUILD-PLAN.md` §0 and §9 for the reasoning.
 - [x] Repo topics include `awesome` and `awesome-list`
 - [x] Default branch is `main`
 - [x] `lint.yml` and `build.yml` are green on the latest commit to `main`
-- [x] No category is more than 50% one vendor's properties
+- [ ] No category is more than 50% one vendor's properties (Revenue Data Modeling is currently 4/4 Fivetran; see ENG-8)
 
 ## Clock start
 
