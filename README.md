@@ -88,7 +88,6 @@ no attribution required.
 - [Gong MCP Server](https://help.gong.io/docs/about-gong-mcp-server) - An official read-only MCP server that answers natural-language questions about accounts and deals from Gong call data. 💰🔌🎖️🤖
 - [HubSpot MCP Server](https://developers.hubspot.com/ai-tools/mcp) - An official remote MCP server giving AI agents read and write access to HubSpot CRM contacts, deals, and engagements. 🧩🔌🎖️🤖
 - [Salesforce Hosted MCP Server](https://www.salesforce.com/agentforce/mcp-support/model-context-protocol/) - A Salesforce-managed MCP endpoint exposing org records, flows, and Apex actions to any MCP-compatible AI agent. 💰🔌🎖️🤖
-- [segment-mcp](https://github.com/katekruger/segment-mcp) - A community-built, read-first MCP server for Twilio Segment that composes five questions — routing, stale sources, delivery health, governance — instead of exposing raw endpoints; data-deletion creation is permanently unreachable in every mode. 🔓🤖⌨️🏠
 ## Workflow Automation
 
 - [Cargo](https://www.getcargo.ai/) - GTM infrastructure platform for building revenue workflows across data, handoffs, and automation. 💰🔌🎖️🤖⌨️
