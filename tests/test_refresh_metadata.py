@@ -63,3 +63,44 @@ def test_main_exits_zero_when_not_rate_limited(tmp_path, monkeypatch):
     monkeypatch.setenv("GITHUB_TOKEN", "fake-token")
     exit_code = refresh_metadata.main(["--tools-dir", str(tools_dir)])
     assert exit_code == 0
+
+
+def test_removal_issue_deduplicated_across_runs(tmp_path, monkeypatch):
+    """The same 404'd repo run through refresh() twice must file exactly one
+    removal issue, not one per run — a daily workflow that re-files the same
+    issue every day is worse than useless."""
+    import github_issues
+
+    tools_dir = tmp_path / "tools"
+    tools_dir.mkdir()
+    write_tool(tools_dir, "a.yml", "https://github.com/a/a")
+
+    monkeypatch.setenv("GITHUB_REPOSITORY", "katekruger/awesome-gtm-engineering")
+
+    created_titles = []
+
+    class FakeResponse:
+        def __init__(self, json_data):
+            self._json = json_data
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return self._json
+
+    def fake_get(url, headers=None, params=None, timeout=None):
+        return FakeResponse([{"title": t} for t in created_titles])
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        created_titles.append(json["title"])
+        return FakeResponse({})
+
+    monkeypatch.setattr(github_issues.requests, "get", fake_get)
+    monkeypatch.setattr(github_issues.requests, "post", fake_post)
+
+    with patch.object(refresh_metadata, "fetch_repo_metadata", return_value=None):
+        refresh_metadata.refresh(tools_dir, "fake-token")
+        refresh_metadata.refresh(tools_dir, "fake-token")
+
+    assert len(created_titles) == 1

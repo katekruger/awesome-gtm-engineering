@@ -44,6 +44,8 @@ import sys
 import requests
 import yaml
 
+import github_issues
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 GITHUB_API = "https://api.github.com"
 
@@ -89,25 +91,22 @@ def fetch_repo_metadata(owner, repo, token):
     }
 
 
-def open_removal_issue(owner, repo, tool_name, token):
+def open_removal_issue(owner, repo, tool_name, token, existing_titles):
+    """Deduplicated by exact issue title via github_issues, the same helper
+    linkcheck.py and staleness.py use — without it, one 404'd repo files a
+    new issue every single day the refresh workflow runs."""
     target_repo = os.environ.get("GITHUB_REPOSITORY")
     if not target_repo:
         return
-    headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
-    requests.post(
-        f"{GITHUB_API}/repos/{target_repo}/issues",
-        headers=headers,
-        json={
-            "title": f"Remove: {tool_name}",
-            "body": (
-                f"`{tool_name}`'s source repo `{owner}/{repo}` returned 404 "
-                "during the daily metadata refresh — it may be deleted, "
-                "renamed without a redirect, or made private. A human "
-                "should confirm before removing the entry."
-            ),
-            "labels": ["remove-tool"],
-        },
-        timeout=30,
+    title = f"Remove: {tool_name}"
+    body = (
+        f"`{tool_name}`'s source repo `{owner}/{repo}` returned 404 "
+        "during the daily metadata refresh — it may be deleted, "
+        "renamed without a redirect, or made private. A human "
+        "should confirm before removing the entry."
+    )
+    github_issues.create_issue_if_new(
+        target_repo, title, body, ["removal-review"], token, existing_titles
     )
 
 
@@ -120,6 +119,13 @@ def refresh(tools_dir, token):
     notes = []
     updated = 0
     rate_limited = False
+
+    target_repo = os.environ.get("GITHUB_REPOSITORY")
+    existing_titles = (
+        github_issues.list_open_issue_titles(target_repo, "removal-review", token)
+        if target_repo
+        else set()
+    )
 
     for path in sorted(pathlib.Path(tools_dir).glob("*.yml")):
         with open(path) as f:
@@ -142,7 +148,7 @@ def refresh(tools_dir, token):
 
         if metadata is None:
             notes.append(f"{path.name}: {owner}/{repo} returned 404 — flagged for removal")
-            open_removal_issue(owner, repo, tool["name"], token)
+            open_removal_issue(owner, repo, tool["name"], token, existing_titles)
             continue
 
         full_name = metadata.pop("full_name")
