@@ -17,6 +17,23 @@ def test_valid_fixture_passes(valid_fixture_dir):
     assert category_count == 2
 
 
+def test_below_minimum_and_vendor_capture_both_reported(workspace, tool_factory):
+    # A category below its minimum used to skip the vendor-concentration
+    # check entirely (it lived in the min-entries check's `else` branch), so
+    # a contributor fixing the count would only then discover a second,
+    # previously-invisible error. Both must be reported in one pass.
+    categories_file, tools_dir = workspace(
+        tools=[
+            tool_factory(name="A", website_url="https://a.example", source_code_url="https://github.com/acme/a"),
+            tool_factory(name="B", website_url="https://b.example", source_code_url="https://github.com/acme/b"),
+        ]
+    )
+    errors, _, _ = validate_module.validate(categories_file, tools_dir)
+    assert any("needs at least 3" in e for e in errors)
+    assert any("50%" in e and "acme" in e for e in errors)
+    assert len(errors) == 2
+
+
 def test_category_below_minimum_fails(workspace, tool_factory):
     categories_file, tools_dir = workspace(
         tools=[

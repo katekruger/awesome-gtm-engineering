@@ -238,12 +238,17 @@ def validate(categories_file, tools_dir, schema_file=SCHEMA_FILE):
 
     for cat in categories:
         name, minimum = cat["name"], cat["min_entries"]
+        # Independent checks, not if/elif: a category below its minimum
+        # used to skip the vendor-concentration check entirely (it lived in
+        # this branch's `else`), so a contributor who fixed the count would
+        # only then discover a second, previously-invisible error. Running
+        # both means every problem surfaces in one pass.
         if counts[name] < minimum:
             errors.append(
                 f"category {name!r} has {counts[name]} entries, "
                 f"needs at least {minimum}"
             )
-        else:
+        if counts[name] > 0:
             top_vendor, top_count = max(
                 vendor_counts[name].items(), key=lambda kv: kv[1], default=(None, 0)
             )
