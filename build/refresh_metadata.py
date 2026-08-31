@@ -45,13 +45,10 @@ import requests
 import yaml
 
 import github_issues
+from github_issues import RateLimited, _raise_if_rate_limited  # noqa: F401 — re-exported for callers/tests
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 GITHUB_API = "https://api.github.com"
-
-
-class RateLimited(Exception):
-    pass
 
 
 def parse_owner_repo(source_code_url):
@@ -59,19 +56,6 @@ def parse_owner_repo(source_code_url):
         r"https?://github\.com/([^/]+)/([^/]+?)/?$", source_code_url or ""
     )
     return match.groups() if match else None
-
-
-def _raise_if_rate_limited(resp):
-    """GitHub returns 403-with-remaining-zero for the primary rate limit and
-    429 for secondary rate limits — the one you actually hit refreshing 62
-    repos in a loop. Both must stop the run immediately; only 403 was
-    handled before, so a 429 fell through to a partial refresh getting
-    committed."""
-    is_primary = resp.status_code == 403 and resp.headers.get("X-RateLimit-Remaining") == "0"
-    is_secondary = resp.status_code == 429
-    if is_primary or is_secondary:
-        reset = resp.headers.get("Retry-After") or resp.headers.get("X-RateLimit-Reset")
-        raise RateLimited(reset)
 
 
 def fetch_repo_metadata(owner, repo, token):
@@ -148,22 +132,26 @@ def refresh(tools_dir, token):
         owner, repo = owner_repo
         try:
             metadata = fetch_repo_metadata(owner, repo, token)
+            if metadata is None:
+                notes.append(f"{path.name}: {owner}/{repo} returned 404 — flagged for removal")
+                if target_repo:
+                    if existing_titles is None:
+                        existing_titles = github_issues.list_open_issue_titles(
+                            target_repo, "removal-review", token
+                        )
+                    open_removal_issue(owner, repo, tool["name"], token, existing_titles)
+                continue
         except RateLimited as e:
+            # Inside the same try as the removal-issue calls above, not just
+            # fetch_repo_metadata: list_open_issue_titles and
+            # create_issue_if_new hit the GitHub issues API too, and a 429
+            # there used to propagate as an uncaught requests.HTTPError
+            # instead of stopping the run cleanly.
             notes.append(f"rate limited, stopping (resets at {e.args[0]})")
             rate_limited = True
             break
         except requests.HTTPError as e:
             notes.append(f"{path.name}: {e}")
-            continue
-
-        if metadata is None:
-            notes.append(f"{path.name}: {owner}/{repo} returned 404 — flagged for removal")
-            if target_repo:
-                if existing_titles is None:
-                    existing_titles = github_issues.list_open_issue_titles(
-                        target_repo, "removal-review", token
-                    )
-                open_removal_issue(owner, repo, tool["name"], token, existing_titles)
             continue
 
         full_name = metadata.pop("full_name")

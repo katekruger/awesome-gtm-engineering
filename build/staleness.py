@@ -101,7 +101,11 @@ def main(argv=None):
     token = os.environ.get("GITHUB_TOKEN")
     repo = os.environ.get("GITHUB_REPOSITORY")
     if token and repo:
-        filed = file_issues(stale_entries, repo, token)
+        try:
+            filed = file_issues(stale_entries, repo, token)
+        except github_issues.RateLimited as e:
+            print(f"rate limited, stopping (resets at {e.args[0]})")
+            return 1
         print(f"found {len(stale_entries)} stale entrie(s), filed {filed} new issue(s)")
     else:
         print(f"found {len(stale_entries)} stale entrie(s) (GITHUB_TOKEN/GITHUB_REPOSITORY not set, not filing issues)")
