@@ -28,20 +28,76 @@ SCHEMA_FILE = pathlib.Path(__file__).resolve().parent / "schema.json"
 
 DASH_CHARS = {"–": "en dash (–)", "—": "em dash (—)"}
 
-GITHUB_HOSTS = {"github.com", "www.github.com"}
+# Code-hosting roots where the owner appears as the first path segment
+# (github.com/owner/repo, gitlab.com/owner/repo, ...). Treated identically:
+# resolving only github.com meant a GitLab/Bitbucket/Codeberg/sr.ht-hosted
+# monoculture was invisible to this rule.
+CODE_HOSTS = {
+    "github.com", "www.github.com",
+    "gitlab.com", "www.gitlab.com",
+    "bitbucket.org", "www.bitbucket.org",
+    "codeberg.org", "www.codeberg.org",
+    "sr.ht", "git.sr.ht",
+}
+
+# Hosts that indicate "this is documentation," not "this is the vendor" —
+# a project's docs living on readthedocs is not a vendor-identity signal at
+# all, and treating it as one collapses unrelated readthedocs-hosted
+# projects into a single fictional vendor.
+DOC_HOST_SUFFIXES = ("readthedocs.io", "readthedocs.org")
+
+# A small, checked-in list of second-level public-suffix patterns, so that
+# e.g. 'acme.co.uk' resolves to the full registrable domain rather than the
+# meaningless label 'co'. Deliberately not a full public-suffix-list
+# dependency (this repo has none, and determinism argues against fetching
+# one at runtime) — just enough of the common ccTLD compounds to stop the
+# obviously wrong cases.
+MULTI_PART_SUFFIXES = {
+    "co.uk", "org.uk", "ac.uk", "gov.uk", "net.uk",
+    "com.au", "net.au", "org.au",
+    "co.nz", "co.jp", "co.kr", "co.in", "co.il", "co.za",
+    "com.br", "com.mx", "com.sg",
+}
+
+
+def _is_doc_host(host):
+    return any(host == suffix or host.endswith("." + suffix) for suffix in DOC_HOST_SUFFIXES)
+
+
+def _path_owner(url):
+    """First non-empty path segment, e.g. 'acme' from '/acme/repo'. sr.ht
+    usernames are conventionally written '~acme' — strip the tilde so an
+    sr.ht entry can still match the same vendor's identity elsewhere."""
+    owner = next((p for p in urlparse(url).path.split("/") if p), None)
+    if owner and owner.startswith("~"):
+        owner = owner[1:]
+    return owner
 
 
 def _domain_key(host):
-    """Best-effort SLD extraction from a hostname (e.g. 'acme' from
-    'www.acme.com'). Not a real eTLD+1 parser — this repo has no public
-    suffix list dependency — but it is enough to match a vendor's website
-    against their GitHub owner login, which is all this rule needs."""
+    """Best-effort registrable-domain extraction from a hostname (e.g.
+    'acme' from 'www.acme.com'). Not a real eTLD+1 parser — this repo has
+    no public suffix list dependency — but it is enough to match a
+    vendor's website against their code-host owner login, which is all
+    this rule needs.
+
+    A hostname ending in one of MULTI_PART_SUFFIXES (e.g. 'acme.co.uk')
+    returns the full three-label string instead of just 'acme': collapsing
+    to the bare label would make 'acme.co.uk' and 'acme.com.au' — or any
+    other pair of otherwise-unrelated companies that happen to share a
+    generic name under different ccTLDs — read as the same vendor, which is
+    a worse failure than not matching them to a same-vendor github owner at
+    all."""
     labels = [label for label in host.split(".") if label]
     if labels and labels[0] == "www":
         labels = labels[1:]
     if not labels:
         return None
-    return labels[0] if len(labels) == 1 else labels[-2]
+    if len(labels) == 1:
+        return labels[0]
+    if len(labels) >= 3 and ".".join(labels[-2:]) in MULTI_PART_SUFFIXES:
+        return ".".join(labels[-3:])
+    return labels[-2]
 
 
 def vendor_key(tool, sentinel):
@@ -53,13 +109,27 @@ def vendor_key(tool, sentinel):
     monoculture the policy forbids, with submitted_by_vendor false on all
     four.
 
-    Derived from the registrable domain of source_code_url, falling back
-    to website_url. A github.com or *.github.io URL yields the owner/org
-    login instead, since github.com is the registrable domain for every
-    GitHub-hosted entry and would otherwise collapse the whole list into
-    one vendor. An entry with no resolvable domain gets a sentinel unique
-    to it, so it never accidentally clusters with another such entry.
+    An explicit `vendor:` field always wins when present — a curator-set
+    escape hatch for the cases the URL heuristic below gets wrong (e.g. a
+    GitHub org name that doesn't match the marketing domain: 'integromat'
+    vs. 'make.com'). An ever-cleverer heuristic doesn't scale past a
+    handful of such cases; a field a curator sets once does.
+
+    Otherwise: derived from the registrable domain of source_code_url,
+    falling back to website_url. A recognized code-hosting URL
+    (CODE_HOSTS, or a *.github.io URL) yields the owner/org login instead
+    of the host itself, since e.g. github.com is the registrable domain for
+    every GitHub-hosted entry and would otherwise collapse the whole list
+    into one vendor. A documentation host (DOC_HOST_SUFFIXES) contributes
+    no signal at all and falls through to the next URL, rather than being
+    treated as if it were the vendor's own domain. An entry with no
+    resolvable signal gets a sentinel unique to it, so it never accidentally
+    clusters with another such entry.
     """
+    explicit = tool.get("vendor")
+    if explicit:
+        return explicit.strip().casefold()
+
     for url in (tool.get("source_code_url"), tool.get("website_url")):
         if not url:
             continue
@@ -69,8 +139,10 @@ def vendor_key(tool, sentinel):
             host = ""
         if not host:
             continue
-        if host in GITHUB_HOSTS:
-            owner = next((p for p in urlparse(url).path.split("/") if p), None)
+        if _is_doc_host(host):
+            continue
+        if host in CODE_HOSTS:
+            owner = _path_owner(url)
             if owner:
                 return owner.casefold()
             continue

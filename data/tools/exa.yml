@@ -5,6 +5,7 @@ categories:
 - Research & Scraping
 pricing_model: freemium
 source_code_url: https://github.com/exa-labs/exa-mcp-server
+vendor: exa
 license: MIT
 has_api: true
 api_docs_url: https://docs.exa.ai/

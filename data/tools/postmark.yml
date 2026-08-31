@@ -6,6 +6,7 @@ categories:
 - Deliverability
 pricing_model: freemium
 source_code_url: https://github.com/activecampaign/postmark-mcp
+vendor: activecampaign
 license: MIT
 has_api: true
 api_docs_url: https://postmarkapp.com/developer

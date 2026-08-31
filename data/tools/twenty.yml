@@ -6,6 +6,7 @@ categories:
 - CRM & Data Quality
 pricing_model: open_core
 source_code_url: https://github.com/twentyhq/twenty
+vendor: twenty
 license: AGPL-3.0
 has_api: true
 api_docs_url: https://twenty.com/developers

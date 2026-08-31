@@ -6,6 +6,7 @@ categories:
 - Revenue Data Modeling
 pricing_model: open_source
 source_code_url: https://github.com/TobikoData/sqlmesh
+vendor: tobikodata
 license: Apache-2.0
 has_api: false
 api_docs_url: null
