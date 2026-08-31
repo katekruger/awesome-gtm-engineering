@@ -145,6 +145,26 @@ def test_vendor_capture_3_of_5_fails(workspace, tool_factory):
     assert any("50%" in e and "acme" in e for e in errors)
 
 
+def test_vendor_capture_exactly_50_percent_fails(workspace, tool_factory):
+    # 4 of 8 is exactly half the category. The rule exists to catch a
+    # monoculture, and a category that is precisely one vendor's half is the
+    # case it was written to prevent — see docs/curation-policy.md #2.
+    categories_file, tools_dir = workspace(
+        tools=[
+            tool_factory(name="A", website_url="https://a.example", source_code_url="https://github.com/acme/a"),
+            tool_factory(name="B", website_url="https://b.example", source_code_url="https://github.com/acme/b"),
+            tool_factory(name="C", website_url="https://c.example", source_code_url="https://github.com/acme/c"),
+            tool_factory(name="D", website_url="https://d.example", source_code_url="https://github.com/acme/d"),
+            tool_factory(name="E", website_url="https://e.example"),
+            tool_factory(name="F", website_url="https://f.example"),
+            tool_factory(name="G", website_url="https://g.example"),
+            tool_factory(name="H", website_url="https://h.example"),
+        ]
+    )
+    errors, _, _ = validate_module.validate(categories_file, tools_dir)
+    assert any("50%" in e and "acme" in e for e in errors)
+
+
 def test_vendor_key_recognizes_same_vendor_across_url_shapes():
     github_entry = {"source_code_url": "https://github.com/acme/x", "website_url": "https://x.example"}
     website_entry = {"source_code_url": None, "website_url": "https://acme.com"}

@@ -4,8 +4,9 @@
 Run in CI on every pull request. Exits non-zero on any failure.
 
 Checks, beyond JSON Schema:
-  - category minimum of 3 entries, and no category >50% one vendor's
-    self-submissions
+  - category minimum of 3 entries, and no category may have a single vendor
+    at 50% or more of its entries (a category that is precisely half one
+    vendor is the monoculture this rule exists to catch, not a pass)
   - duplicate entries by website_url and by name (awesome-lint's
     double-link rule only catches URL collisions in the rendered README;
     two entries with different URLs but the same name still need to be
@@ -174,10 +175,14 @@ def validate(categories_file, tools_dir, schema_file=SCHEMA_FILE):
             top_vendor, top_count = max(
                 vendor_counts[name].items(), key=lambda kv: kv[1], default=(None, 0)
             )
-            if top_count * 2 > counts[name]:
+            # >=, not >: a category that is EXACTLY half one vendor is the
+            # monoculture docs/curation-policy.md #2 exists to catch, not a
+            # pass. With an even category size, `>` can never fire on the
+            # one distribution the rule was written for.
+            if top_count * 2 >= counts[name]:
                 errors.append(
-                    f"category {name!r} is more than 50% one vendor's "
-                    f"properties ({top_vendor}: {top_count}/{counts[name]})"
+                    f"category {name!r} has a vendor at 50% or more of its "
+                    f"entries ({top_vendor}: {top_count}/{counts[name]})"
                 )
 
     return errors, len(tool_files), len(categories)

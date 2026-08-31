@@ -28,10 +28,11 @@ structural rules below. It never decides what belongs on the list.
 1. **Self-submissions are welcome and must be disclosed.** If you work for
    the company whose product you're adding, set `submitted_by_vendor: true`
    in the YAML. That is not disqualifying — an undisclosed self-submission is.
-2. **No category may be more than 50% one vendor's properties.** A single
-   vendor listing five of their own products under one category crowds out
-   independent options and reads as a content-marketing placement, not a
-   curated list. `build/validate.py` enforces this at PR time.
+2. **No category may have a single vendor at 50% or more of its entries.** A
+   single vendor holding half or more of one category crowds out independent
+   options and reads as a content-marketing placement, not a curated list.
+   `build/validate.py` enforces this at PR time, including the exact-50%
+   case.
 3. **Entries must be usable without a sales call.** Public docs, public
    pricing or a real free tier, or a public repository. "Contact us for a
    demo" is not enough on its own.
