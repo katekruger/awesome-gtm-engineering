@@ -6,6 +6,7 @@ categories:
 - Workflow Automation
 pricing_model: freemium
 source_code_url: https://github.com/integromat/make-mcp-server
+vendor: make
 license: MIT
 has_api: true
 api_docs_url: https://developers.make.com/api-documentation

@@ -6,8 +6,9 @@ reviews without duplicating text.
 
 1. **Self-submissions are welcome and must be disclosed** via
    `submitted_by_vendor: true`. Not disqualifying — undisclosed is.
-2. **No category may be more than 50% one vendor's properties.**
-   `build/validate.py` enforces this at PR time.
+2. **No category may have a single vendor at 50% or more of its entries.**
+   `build/validate.py` enforces this at PR time — including the exact-50%
+   case, which is the monoculture this rule exists to catch, not a pass.
 3. **Entries must be usable without a sales call** — public docs, public
    pricing or a real free tier, or a public repository.
 4. **No listing-for-backlink.**

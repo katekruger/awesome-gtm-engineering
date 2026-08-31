@@ -6,6 +6,7 @@ categories:
 - Outbound & Sequencing
 pricing_model: commercial
 source_code_url: https://github.com/Woodpeckerco/woodpecker-mcp-server
+vendor: woodpecker
 license: null
 has_api: true
 api_docs_url: https://developers.woodpecker.co/docs/

@@ -87,6 +87,7 @@ def test_a_deliberately_stale_entry_opens_exactly_one_issue(tmp_path):
 
     class FakeResponse:
         status_code = 201
+        headers = {}
 
         def raise_for_status(self):
             pass
@@ -119,3 +120,29 @@ def test_a_deliberately_stale_entry_opens_exactly_one_issue(tmp_path):
                 filed_second_run += 1
     assert filed_second_run == 0
     assert len(created) == 1
+
+
+def test_main_rate_limited_on_issue_api_stops_cleanly(tmp_path, monkeypatch, capsys):
+    """A 429 from the GitHub issues API must stop main() with the same clean
+    'rate limited, stopping' note refresh_metadata.py uses, not an uncaught
+    requests.HTTPError."""
+    import github_issues
+
+    class FakeResp:
+        def __init__(self, status_code, headers=None):
+            self.status_code = status_code
+            self.headers = headers or {}
+
+    tools_dir = tmp_path / "tools"
+    tools_dir.mkdir()
+    write_tool(tools_dir, "a.yml", last_commit_at="2024-01-01T00:00:00Z")
+
+    monkeypatch.setenv("GITHUB_TOKEN", "fake-token")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "owner/repo")
+
+    with patch.object(staleness, "find_stale", return_value=[{"file": "a.yml", "name": "A", "reason": "stale"}]), \
+        patch.object(github_issues.requests, "get", return_value=FakeResp(429)):
+        exit_code = staleness.main(["--tools-dir", str(tools_dir)])
+
+    assert exit_code == 1
+    assert "rate limited, stopping" in capsys.readouterr().out

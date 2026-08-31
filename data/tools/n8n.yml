@@ -6,6 +6,7 @@ categories:
 - Workflow Automation
 pricing_model: freemium
 source_code_url: https://github.com/n8n-io/n8n
+vendor: n8n
 license: Sustainable Use License
 has_api: true
 api_docs_url: https://docs.n8n.io/api/

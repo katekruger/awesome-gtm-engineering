@@ -247,7 +247,16 @@ def main(argv=None):
         token = os.environ.get("GITHUB_TOKEN")
         repo = os.environ.get("GITHUB_REPOSITORY")
         if token and repo:
-            filed = file_issues(dead_links, repo, token)
+            try:
+                filed = file_issues(dead_links, repo, token)
+            except github_issues.RateLimited as e:
+                # A 429 from the GitHub issues API itself, not the target
+                # link — the dead-link scan above already completed and its
+                # state file is already saved, so this only stops issue
+                # filing, cleanly, instead of surfacing as an uncaught
+                # requests.HTTPError.
+                print(f"rate limited, stopping (resets at {e.args[0]})")
+                return 1
             print(f"found {len(dead_links)} dead link(s), filed {filed} new issue(s)")
         else:
             print(f"found {len(dead_links)} dead link(s) (GITHUB_TOKEN/GITHUB_REPOSITORY not set, not filing issues)")

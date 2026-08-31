@@ -95,6 +95,9 @@ def test_removal_issue_deduplicated_across_runs(tmp_path, monkeypatch):
     created_titles = []
 
     class FakeResponse:
+        status_code = 200
+        headers = {}
+
         def __init__(self, json_data):
             self._json = json_data
 

@@ -56,6 +56,11 @@
     },
     "has_cli": { "type": "boolean" },
     "self_hostable": { "type": "boolean" },
+    "vendor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional override for the vendor-concentration check in build/validate.py, for the cases its URL heuristic gets wrong (e.g. a GitHub org name that doesn't match the marketing domain)."
+    },
     "submitted_by_vendor": { "type": "boolean" },
     "stargazers_count": { "type": ["integer", "null"] },
     "last_commit_at": { "type": ["string", "null"] },

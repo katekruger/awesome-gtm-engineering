@@ -82,6 +82,7 @@ no attribution required.
 - [dbt_salesforce](https://fivetran.github.io/dbt_salesforce/) - A dbt package that models raw Salesforce CRM connector data into a ready-to-query revenue and pipeline data model. 🔓🏠
 - [dbt_stripe](https://fivetran.github.io/dbt_stripe/) - A dbt package that transforms raw Stripe connector data into MRR and revenue-recognition-ready marts. 🔓🏠
 - [Hightouch](https://hightouch.com) - A vendor-neutral reverse ETL platform that models and syncs warehouse revenue data into CRMs, ad platforms, and other business tools. 🧩🔌🎖️🤖⌨️
+- [MetricFlow](https://docs.getdbt.com/docs/build/about-metricflow) - Semantic layer engine for dbt Labs that defines metrics once and computes them consistently across every downstream query, including revenue metrics like MRR and ARR. 🔓⌨️🏠
 - [pipeline-waterfall](https://github.com/katekruger/pipeline-waterfall) - A dbt package for B2B bookings and pipeline waterfall analytics, reconciling stage movement between created, advanced, won, lost, and reopened. 🔓🏠
 - [SQLMesh](https://sqlmesh.readthedocs.io/en/stable/) - An open source data transformation framework with column-level lineage and virtual environments, built as a backward-compatible alternative to dbt. 🔓⌨️🏠
 ## Agents & MCP Servers

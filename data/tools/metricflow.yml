@@ -1,12 +1,12 @@
-name: SQLMesh
-website_url: https://sqlmesh.readthedocs.io/en/stable/
-description: An open source data transformation framework with column-level lineage
-  and virtual environments, built as a backward-compatible alternative to dbt.
+name: MetricFlow
+website_url: https://docs.getdbt.com/docs/build/about-metricflow
+description: Semantic layer engine for dbt Labs that defines metrics once and computes
+  them consistently across every downstream query, including revenue metrics like
+  MRR and ARR.
 categories:
 - Revenue Data Modeling
 pricing_model: open_source
-source_code_url: https://github.com/TobikoData/sqlmesh
-vendor: tobikodata
+source_code_url: https://github.com/dbt-labs/metricflow
 license: Apache-2.0
 has_api: false
 api_docs_url: null

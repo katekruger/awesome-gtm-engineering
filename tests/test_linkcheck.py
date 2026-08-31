@@ -10,8 +10,9 @@ import linkcheck  # noqa: E402
 
 
 class FakeResponse:
-    def __init__(self, status_code):
+    def __init__(self, status_code, headers=None):
         self.status_code = status_code
+        self.headers = headers or {}
 
     def raise_for_status(self):
         pass
@@ -239,3 +240,38 @@ def test_a_deliberately_broken_link_opens_exactly_one_issue(tmp_path, tool_facto
 
     assert filed_second_run == 0
     assert len(created_issues) == 1
+
+
+def test_main_rate_limited_on_issue_api_stops_cleanly(tmp_path, monkeypatch, capsys):
+    """A 429 from the GitHub issues API (not the target link itself) must
+    stop main() with the same clean 'rate limited, stopping' note
+    refresh_metadata.py uses, not an uncaught requests.HTTPError."""
+    import yaml
+    import github_issues
+
+    tools_dir = tmp_path / "tools"
+    tools_dir.mkdir()
+    tool = {
+        "name": "A",
+        "website_url": "https://dead.example",
+        "description": "A tool.",
+        "categories": ["Enrichment & Data"],
+        "pricing_model": "open_source",
+        "source_code_url": None,
+        "license": None,
+        "has_api": True,
+        "has_mcp_server": False,
+        "has_cli": False,
+        "self_hostable": True,
+    }
+    (tools_dir / "a.yml").write_text(yaml.safe_dump(tool))
+
+    monkeypatch.setenv("GITHUB_TOKEN", "fake-token")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "owner/repo")
+
+    with patch.object(linkcheck, "check_url", return_value="dead"), \
+        patch.object(github_issues.requests, "get", return_value=FakeResponse(429)):
+        exit_code = linkcheck.main(["--tools-dir", str(tools_dir), "--state-file", str(tmp_path / "state.json")])
+
+    assert exit_code == 1
+    assert "rate limited, stopping" in capsys.readouterr().out

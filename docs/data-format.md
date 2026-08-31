@@ -27,6 +27,9 @@ self_hostable: false
 # --- disclosure ---
 submitted_by_vendor: false
 
+# --- optional override for the vendor-concentration check; see notes below ---
+# vendor: acme
+
 # --- machine-refreshed by build/refresh_metadata.py; never hand-edit ---
 stargazers_count: null
 last_commit_at: null
@@ -48,3 +51,10 @@ current_release: null
   `archived`, `current_release`) is written only by
   `build/refresh_metadata.py`. A PR that hand-edits these fields will be
   overwritten on the next daily refresh — don't bother setting them yourself.
+- `vendor` (optional) overrides `build/validate.py`'s vendor-concentration
+  check for this one entry. Set it when the automatic heuristic (the code
+  host's owner login, falling back to the website's registrable domain)
+  would resolve to something that isn't the entry's real owner — e.g. a
+  GitHub org that predates a product rename, or a repo hosted under an
+  acquirer's org rather than the product's own brand. Most entries never
+  need it.
