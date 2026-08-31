@@ -200,6 +200,7 @@ def validate(categories_file, tools_dir, schema_file=SCHEMA_FILE):
 
     seen_urls = {}
     seen_names = {}
+    seen_source_urls = {}
 
     tool_files = load_tools(tools_dir)
     for path, tool in tool_files:
@@ -227,6 +228,22 @@ def validate(categories_file, tools_dir, schema_file=SCHEMA_FILE):
             )
         else:
             seen_names[name_key] = path.name
+
+        # Two entries pointing at the same repo isn't just a data-quality
+        # smell: build/refresh_metadata.py's removal-issue title is keyed on
+        # the entry's name, not the repo, so two differently-named entries
+        # sharing a source_code_url would each independently file their own
+        # "Remove: <name>" issue the day that repo 404s — two issues for one
+        # dead link. Catching the duplicate here removes the cause instead
+        # of teaching the issue-filer to dedup titles across entries.
+        source_url = (tool.get("source_code_url") or "").rstrip("/").lower()
+        if source_url:
+            if source_url in seen_source_urls:
+                errors.append(
+                    f"{path.name}: duplicate source_code_url, already used by {seen_source_urls[source_url]}"
+                )
+            else:
+                seen_source_urls[source_url] = path.name
 
         key = vendor_key(tool, sentinel=path.name)
         for cat_name in tool["categories"]:

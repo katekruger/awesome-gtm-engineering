@@ -89,7 +89,13 @@ def fetch_repo_metadata(owner, repo, token):
 def open_removal_issue(owner, repo, tool_name, token, existing_titles):
     """Deduplicated by exact issue title via github_issues, the same helper
     linkcheck.py and staleness.py use — without it, one 404'd repo files a
-    new issue every single day the refresh workflow runs."""
+    new issue every single day the refresh workflow runs.
+
+    The title is keyed on the entry's name, not on owner/repo — safe only
+    because build/validate.py rejects two entries sharing a source_code_url.
+    Without that check, two differently-named entries pointing at the same
+    repo would each file their own "Remove: <name>" issue for one dead
+    link."""
     target_repo = os.environ.get("GITHUB_REPOSITORY")
     title = f"Remove: {tool_name}"
     body = (

@@ -57,6 +57,24 @@ def test_duplicate_url_fails(workspace, tool_factory):
     assert any("duplicate website_url" in e for e in errors)
 
 
+def test_duplicate_source_code_url_with_different_names_fails(workspace, tool_factory):
+    # CLOSE3-5: two entries with different names and different website_urls
+    # but the same source_code_url used to pass validate.py cleanly, and
+    # each independently files its own "Remove: <name>" issue on the same
+    # 404'd repo — two issues for one dead link. Catching the duplicate here
+    # removes the entry-level cause rather than papering over it in the
+    # issue-filing title.
+    categories_file, tools_dir = workspace(
+        tools=[
+            tool_factory(name="A", website_url="https://a.example", source_code_url="https://github.com/acme/same-repo"),
+            tool_factory(name="B", website_url="https://b.example", source_code_url="https://github.com/acme/same-repo"),
+            tool_factory(name="C", website_url="https://c.example"),
+        ]
+    )
+    errors, _, _ = validate_module.validate(categories_file, tools_dir)
+    assert any("duplicate source_code_url" in e for e in errors)
+
+
 def test_duplicate_name_with_different_urls_fails(workspace, tool_factory):
     categories_file, tools_dir = workspace(
         tools=[
