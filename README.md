@@ -127,11 +127,3 @@ no attribution required.
 ## Footnotes
 
 🔓 open source · 💰 commercial · 🧩 freemium · 🔌 has API · 🤖 has MCP server (🎖️ official) · ⌨️ has CLI · 🏠 self-hostable
-
-## See also
-
-Every project here shares one idea: a GTM system should refuse to act on data it cannot verify.
-
-[segment-mcp](https://github.com/katekruger/segment-mcp) — read-first MCP server for Twilio Segment. Answers which destinations get which events and which sources are governed by nothing.
-
-[deliverability-guard](https://github.com/katekruger/deliverability-guard) — sending circuit breaker for outbound email. Refuses to trip on one bad day at n=1.
