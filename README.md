@@ -104,6 +104,7 @@ no attribution required.
 
 - [Apify](https://apify.com/) - Web scraping and automation platform running actors through an API-driven marketplace. 🧩🔌🎖️🤖
 - [Browserbase](https://www.browserbase.com/) - Cloud browser infrastructure giving AI agents reliable, scalable access to websites. 🧩🔌🎖️🤖
+- [EarlyLore](https://earlylore.com) - Research workspace for founders to study real SaaS products, revenue signals and competitor page changes before building. 🧩
 - [Exa](https://exa.ai/) - Web search API built for retrieval and grounding in AI applications. 🧩🔌🎖️🤖
 - [Firecrawl](https://www.firecrawl.dev/) - API for turning websites into clean data through scraping, crawling, and extraction. 🧩🔌🎖️🤖🏠
 ## Compensation & Planning
